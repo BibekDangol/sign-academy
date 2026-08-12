@@ -1,0 +1,138 @@
+/* Base Navbar Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #333;
+  color: white;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.navbar-list {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.navbar-list li {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-list a {
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Dropdown */
+.dropdown-menu {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: #444;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  width: 200px;
+  z-index: 1000;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu ul li {
+  padding: 10px;
+  border-bottom: 1px solid #555;
+}
+
+.dropdown-menu ul li:last-child {
+  border-bottom: none;
+}
+
+.logout-button,
+.dropdown-menu ul li a {
+  color: white;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.logout-button {
+  background-color: #f44336;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f;
+}
+
+.signup-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+}
+
+.menu-button,
+.menu-toggle {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .navbar-list {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: #333;
+    padding-top: 10px;
+  }
+
+  .navbar-list.open {
+    display: flex;
+  }
+
+  .navbar-list li {
+    padding: 10px;
+    justify-content: center;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .menu-toggle {
+    display: none;
+  }
+}

@@ -1,0 +1,138 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Backend</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        .container {
+            margin-top: 20px;
+        }
+        .table {
+            font-size: 14px;
+            width:50%%;
+        }
+        .table th, .table td {
+            padding: 10px;
+            text-align: left;
+        }
+        .table thead {
+            background-color: #343a40;
+            color: #fff;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f8f9fa;
+        }
+        .table-striped tbody tr:nth-of-type(even) {
+            background-color: #e9ecef;
+        }
+        .table td {
+            width: 30%; /* Adjust the width of the first column */
+        }
+  
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3 class="text-center mb-4" style="color: #343a40;">REACT JS COURSE WEBSITE - DJANGO BACKEND</h3>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Function</th>
+                    <th>API Endpoint</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Admin Portal</td>
+                    <td>admin/</td>
+                    <td><a href="http://127.0.0.1:8000/admin/">http://127.0.0.1:8000/admin</a></td>
+                </tr>
+                <tr>
+                    <td>User registration</td>
+                    <td>api/register/</td>
+                    <td><a href="http://127.0.0.1:8000/api/register/">http://127.0.0.1:8000/api/register/</a></td>
+
+                </tr>
+                <tr>
+                    <td>User Login</td>
+                    <td>api/token/</td>
+                    <td><a href="http://127.0.0.1:8000/api/token/">http://127.0.0.1:8000/api/token/</a></td>
+
+                </tr>
+                <tr>
+                    <td>Refresh authentication token</td>
+                    <td>api/token/refresh/</td>
+                    <td><a href="http://127.0.0.1:8000/api/token/refresh/">http://127.0.0.1:8000/api/token/refresh/</a></td>
+
+                </tr>
+                <tr>
+                    <td>Dashboard</td>
+                    <td>api/dashboard/</td>
+                    <td><a href="http://127.0.0.1:8000/api/dashboard/">http://127.0.0.1:8000/api/dashboard/</a></td>
+
+                </tr>
+                <tr>
+                    <td>Change password</td>
+                    <td>api/change-password</td>
+                    <td><a href="http://127.0.0.1:8000/api/change-password/">http://127.0.0.1:8000/api/change-password/</a></td>
+
+                </tr>
+                <tr>
+                    <td>Edit user profile</td>
+                    <td>api/edit-profile</td>
+                    <td><a href="http://127.0.0.1:8000/api/edit-profile/">http://127.0.0.1:8000/api/edit-profile/</a></td>
+
+                </tr>
+                <tr>
+                    <td>Edit user profile</td>
+                    <td>api/edit-profile</td>
+                    <td><a href="http://127.0.0.1:8000/api/edit-profile/">http://127.0.0.1:8000/</a></td>
+
+                </tr>
+                <tr>
+                    <td>Retrieve attendance records (Admin) </td>
+                    <td>api/attendance-records/</td>
+                    <td><a href="http://127.0.0.1:8000/api/attendance-records/">http://127.0.0.1:8000/api/attendance-records/</a></td>
+
+                </tr>
+                <tr>
+                    <td>Upload Profile Picture</td>
+                    <td>api/upload-profile-icon/</td>
+                    <td><a href="http://127.0.0.1:8000/api/upload-profile-icon/">http://127.0.0.1:8000/api/upload-profile-icon/</a></td>
+
+                </tr>
+                <tr>
+                    <td>Users List  (Admin)</td>
+                    <td>api/admin</td>
+                    <td><a href="http://127.0.0.1:8000/api/admin/">http://127.0.0.1:8000/api/admin/</a></td>
+
+                </tr>
+                <tr>
+                    <td>Apply for leave</td>
+                    <td>api/apply-leave</td>
+                    <td><a href="http://127.0.0.1:8000/api/apply-leave/">http://127.0.0.1:8000/api/apply-leave/</a></td>
+
+                </tr>
+                <tr>
+                    <td>Retrieve leave requests (Admin)</td>
+                    <td>api/leave</td>
+                    <td><a href="http://127.0.0.1:8000/api/leave/">http://127.0.0.1:8000/api/leave/</a></td>
+
+                </tr>
+                <tr>
+                    <td>Take action on a leave request (Admin)</td>
+                    <td>api/leave/&lt;int:pk&gt;/action/</td>
+                    <td><a href="http://127.0.0.1:8000/api/leave">http://127.0.0.1:8000/</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

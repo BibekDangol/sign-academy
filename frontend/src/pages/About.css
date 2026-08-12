@@ -1,0 +1,148 @@
+/* Wrapper for the whole page */
+.about-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Main content container */
+.about-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background-image: url('./img/image4.png');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Content box */
+.about-content {
+  max-width: 800px;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+/* Heading */
+.about-heading {
+  font-size: 36px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+/* Paragraph */
+.about-paragraph {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Button */
+.contact-button {
+  background-color: #0dd943;
+  color: #000;
+  font-weight: bold;
+  padding: 15px 40px;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.contact-button:hover {
+  background-color: #0bbf3a;
+}
+
+/* Footer */
+.footer-section {
+  background-color: #101010;
+  color: white;
+  padding: 40px 60px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.footer-column {
+  flex: 1;
+  min-width: 250px;
+  margin-bottom: 30px;
+}
+
+.footer-column h3 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 10px;
+}
+
+.footer-column ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.footer-column ul li a:hover {
+  color: #0dd943;
+}
+
+/* Newsletter */
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.newsletter-input {
+  padding: 10px;
+  width: 100%;
+  max-width: 250px;
+  margin-bottom: 10px;
+  border: 2px solid white;
+  background-color: #222;
+  color: white;
+}
+
+.newsletter-button {
+  background-color: white;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.newsletter-button:hover {
+  background-color: #ddd;
+}
+
+/* Copyright */
+.footer-section p {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 20px;
+}

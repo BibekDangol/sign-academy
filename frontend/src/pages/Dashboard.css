@@ -1,0 +1,105 @@
+.dashboard-page {
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dashboard-content {
+    padding: 100px 20px 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex: 1;
+  }
+  
+  .dashboard-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  .info-box {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  
+  .dashboard-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 12px;
+    width: 100%;
+  }
+  
+  .dashboard-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .info-row {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    color: #444;
+  }
+  
+  .icon {
+    margin-right: 10px;
+    color: #333;
+  }
+  
+  .label {
+    font-weight: bold;
+    margin-right: 8px;
+    color: #333;
+  }
+  
+  .dashboard-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .btn-link {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+  }
+  
+  .btn-link.white {
+    color: white;
+  }
+  
+  .dashboard-links {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  .dashboard-links ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .dashboard-links li {
+    margin-bottom: 15px;
+  }
+  
+  .settings-link {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .settings-link:hover {
+    color: #007BFF;
+  }
+  

@@ -1,0 +1,144 @@
+/* ========== Global Styles ========== */
+.home-container {
+  font-family: 'Segoe UI', sans-serif;
+  color: #222;
+  background-color: #eeebeb;
+}
+
+/* ========== Hero Section ========== */
+.hero {
+  background-size: cover;
+  background-position: center;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.hero-overlay {
+  padding: 3rem;
+  border-radius: 10px;
+  max-width: 700px;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.btn-cta {
+  background-color: #000000;
+  color: white;
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-cta:hover {
+  background-color: #095ec0;
+}
+
+/* ========== Section Titles ========== */
+main section h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 3rem;
+}
+
+/* ========== Card Styles ========== */
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+/* ========== Cards Grid Layout ========== */
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* ========== Testimonials Section ========== */
+.testimonials-section .card {
+  background: #f1f8ff;
+  font-style: italic;
+}
+
+/* ========== Contact Form Section ========== */
+.contact-form {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.contact-form button {
+  width: 100%;
+  background-color: #0a74da;
+  color: white;
+  padding: 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.contact-form button:hover {
+  background-color: #095ec0;
+}
+
+.contact-status {
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+  }
+}

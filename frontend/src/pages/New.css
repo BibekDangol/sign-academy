@@ -1,0 +1,140 @@
+.new{
+    background-image: url('img/image4.png');
+    min-width: 100vw;
+    min-height: 100vh;
+    margin-left: -600px;
+    padding-top: 100px;
+}
+
+.new2{
+    background-image: url('img/image4.png');
+    min-width: 100vw;
+    min-height: 100vh;
+}
+
+
+.hlo{
+    background-image: url('img/image4.png');
+    min-width: 100vw;
+    min-height: 100vh; 
+    margin-left: -600px;
+    padding-top: 100px;  
+}
+
+.custom-textarea {
+    width: 930px;
+    height: 80px;
+}
+
+/* Table styles */
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .attendance-table th,
+  .attendance-table td {
+    border: 2px solid #060606;
+    padding: 18px;
+    text-align: left;
+  }
+  
+  /* Pagination styles */
+  .pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .pagination button {
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #000000;
+    padding: 8px 12px;
+    margin: 0 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination button:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .pagination button.active {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  /* Filter styles */
+  .filter-container {
+    margin-bottom: 20px;
+  }
+  
+  .filter-container select {
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  .filter-container select:focus {
+    outline: none;
+  }
+  
+  /* New.css */
+
+.new {
+  padding: 20px;
+}
+
+.leave-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leave-table th,
+.leave-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.leave-table th {
+  background-color: #f2f2f2;
+}
+
+.leave-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.leave-table tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+.action-cell {
+  width: 150px;
+}
+
+.action-cell select {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.loading-text {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.new1{
+    padding-left: 300px;
+    border: 2px solid black;
+}
+
+.new0 {
+  transition: color 0.3s; /* Smooth transition effect for color change */
+}
+
+.new0:hover {
+  color: lightgreen; /* Change color on hover */
+}
