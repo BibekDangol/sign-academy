@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import {
   Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Paper,
-  Box, Grid, Typography, Modal, Radio, RadioGroup, FormControl, FormLabel,
+  Box, Grid, Typography, Radio, RadioGroup, FormControl, FormLabel,
   InputLabel, MenuItem, Select
 } from '@mui/material';
+import { Button as ShadcnButton } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ToastContainer, toast } from 'react-toastify';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import 'react-toastify/dist/ReactToastify.css';
-import '../Multipage/Payment.css'; // Make sure this exists
 
 const defaultTheme = createTheme();
 
@@ -53,8 +60,6 @@ export default function PaymentForm() {
     setOpen(true);
   };
 
-  const handleCloseModal = () => setOpen(false);
-
   const handlePayNow = () => {
     toast.success('Payment successful');
   };
@@ -89,10 +94,10 @@ export default function PaymentForm() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" className="payment-form-container">
+      <Grid container component="main" className="min-h-screen justify-center items-center bg-[#f5f5f5] py-10 px-4 md:px-0">
         <CssBaseline />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} className="form-box">
-          <Box className="form-inner">
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} className="bg-white rounded-lg">
+          <Box className="my-10 mx-[30px] flex flex-col items-center">
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
@@ -163,10 +168,12 @@ export default function PaymentForm() {
         </Grid>
       </Grid>
 
-      {/* Payment Modal */}
-      <Modal open={open} onClose={handleCloseModal}>
-        <Box className="payment-modal">
-          <Typography variant="h6" gutterBottom>Payment Details</Typography>
+      {/* Payment Dialog */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-[460px]">
+          <DialogHeader>
+            <DialogTitle>Payment Details</DialogTitle>
+          </DialogHeader>
           <Typography>Name: {name}</Typography>
           <Typography>Course: {selectedCourseTitle}</Typography>
           {mode === 'Onsite' && <Typography>Location: {location}</Typography>}
@@ -184,12 +191,12 @@ export default function PaymentForm() {
           <TextField fullWidth required label="Account Number" value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} sx={{ mt: 2 }} />
           <TextField fullWidth required label="Phone Number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} sx={{ mt: 2 }} />
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-            <Button onClick={handlePayNow} variant="contained">Pay Now</Button>
-            <Button onClick={generateReceipt} variant="outlined">Generate Receipt</Button>
-          </Box>
-        </Box>
-      </Modal>
+          <DialogFooter className="mt-3 sm:justify-between">
+            <ShadcnButton onClick={handlePayNow}>Pay Now</ShadcnButton>
+            <ShadcnButton onClick={generateReceipt} variant="outline">Generate Receipt</ShadcnButton>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <ToastContainer />
     </ThemeProvider>

@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import AuthContext from '../context/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import backgroundImage from './img/img4.jpg'; // Background image
 import Navbar from './Navbar1'; // Use your desired navbar file
 import Footer from './Footer';  // ✅ Import footer
@@ -127,50 +130,46 @@ const Register = () => {
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
         }}>
           <h1 style={{ marginBottom: '20px' }}>Sign Up</h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Full Name */}
-            <label htmlFor="fullName">Full Name:</label>
-            <input type="text" id="fullName" value={fullName} onChange={(e) => { setFullName(e.target.value); validateFullName(e.target.value); }}
-              style={{ border: fullNameValid ? '2px solid green' : fullNameError ? '2px solid red' : '1px solid #ccc', width: '100%', padding: '10px', borderRadius: '4px', marginBottom: '10px' }} />
+            <Label htmlFor="fullName">Full Name:</Label>
+            <Input type="text" id="fullName" value={fullName} onChange={(e) => { setFullName(e.target.value); validateFullName(e.target.value); }}
+              className="w-full"
+              style={{ border: fullNameValid ? '2px solid green' : fullNameError ? '2px solid red' : '1px solid #ccc' }} />
             {fullNameError && <p style={{ color: 'red' }}>{fullNameError}</p>}
 
             {/* Username */}
-            <label htmlFor="username">Username:</label>
-            <input type="text" id="username" value={username} onChange={(e) => { setUsername(e.target.value); validateUsername(e.target.value); }}
-              style={{ border: usernameValid ? '2px solid green' : usernameError ? '2px solid red' : '1px solid #ccc', width: '100%', padding: '10px', borderRadius: '4px', marginBottom: '10px' }} />
+            <Label htmlFor="username">Username:</Label>
+            <Input type="text" id="username" value={username} onChange={(e) => { setUsername(e.target.value); validateUsername(e.target.value); }}
+              className="w-full"
+              style={{ border: usernameValid ? '2px solid green' : usernameError ? '2px solid red' : '1px solid #ccc' }} />
             {usernameError && <p style={{ color: 'red' }}>{usernameError}</p>}
 
             {/* Email */}
-            <label htmlFor="email">Email:</label>
-            <input type="email" id="email" value={email} onChange={(e) => { setEmail(e.target.value); validateEmail(e.target.value); }}
-              style={{ border: emailValid ? '2px solid green' : emailError ? '2px solid red' : '1px solid #ccc', width: '100%', padding: '10px', borderRadius: '4px', marginBottom: '10px' }} />
+            <Label htmlFor="email">Email:</Label>
+            <Input type="email" id="email" value={email} onChange={(e) => { setEmail(e.target.value); validateEmail(e.target.value); }}
+              className="w-full"
+              style={{ border: emailValid ? '2px solid green' : emailError ? '2px solid red' : '1px solid #ccc' }} />
             {emailError && <p style={{ color: 'red' }}>{emailError}</p>}
 
             {/* Password */}
-            <label htmlFor="password">Password:</label>
-            <input type="password" id="password" value={password} onChange={(e) => { setPassword(e.target.value); validatePassword(e.target.value); }}
-              style={{ border: passwordValid ? '2px solid green' : passwordError ? '2px solid red' : '1px solid #ccc', width: '100%', padding: '10px', borderRadius: '4px', marginBottom: '10px' }} />
+            <Label htmlFor="password">Password:</Label>
+            <Input type="password" id="password" value={password} onChange={(e) => { setPassword(e.target.value); validatePassword(e.target.value); }}
+              className="w-full"
+              style={{ border: passwordValid ? '2px solid green' : passwordError ? '2px solid red' : '1px solid #ccc' }} />
             {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>}
 
             {/* Confirm Password */}
-            <label htmlFor="confirmPassword">Confirm Password:</label>
-            <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value); validateConfirmPassword(e.target.value); }}
-              style={{ border: confirmPasswordValid ? '2px solid green' : confirmPasswordError ? '2px solid red' : '1px solid #ccc', width: '100%', padding: '10px', borderRadius: '4px', marginBottom: '10px' }} />
+            <Label htmlFor="confirmPassword">Confirm Password:</Label>
+            <Input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value); validateConfirmPassword(e.target.value); }}
+              className="w-full"
+              style={{ border: confirmPasswordValid ? '2px solid green' : confirmPasswordError ? '2px solid red' : '1px solid #ccc' }} />
             {confirmPasswordError && <p style={{ color: 'red' }}>{confirmPasswordError}</p>}
 
             {/* Submit Button */}
-            <button type="submit" style={{
-              width: '100%',
-              backgroundColor: '#28a745',
-              color: '#fff',
-              padding: '10px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              marginTop: '10px'
-            }}>
+            <Button type="submit" className="w-full bg-[#0fb400] hover:bg-[#0bbf3a] text-white">
               Create Account
-            </button>
+            </Button>
 
             <p style={{ marginTop: '15px', fontSize: '14px' }}>
               Already have an account? <Link to="/login" style={{ color: '#007bff' }}>Login</Link>

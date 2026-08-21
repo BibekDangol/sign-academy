@@ -5,6 +5,9 @@ import { Container, Grid, IconButton, Tooltip } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { green } from '@mui/material/colors';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 // ErrorBoundary component to catch and handle errors gracefully
 class ErrorBoundary extends React.Component {
@@ -137,17 +140,16 @@ class App extends Component {
           <Grid container spacing={2} justifyContent="center">
             {imageData.map((item, index) => (
               <Grid item xs={12} key={index} style={{ textAlign: 'center' }}>
-                <img
-                  src={item.image}
-                  alt={`Image ${index}`}
-                  style={{ width: 150, height: 150, objectFit: 'cover', borderRadius: '50%' }}
-                />
+                <Avatar className="h-[150px] w-[150px] mx-auto">
+                  <AvatarImage src={item.image} alt={`Image ${index}`} className="object-cover" />
+                  <AvatarFallback>?</AvatarFallback>
+                </Avatar>
               </Grid>
             ))}
             <Grid item xs={120} style={{ textAlign: 'center'}}>
             UPLOAD / CHANGE PROFILE PICTURE<br />
               <div style={{ position: 'relative', width: 150, height: 150, borderRadius: '50%', overflow: 'hidden', backgroundColor: '#eee' , marginTop:"50px", marginLeft:"70px"}}>
-                <input
+                <Input
                   style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' , paddingLeft:"400px"}}
                   accept="image/*"
                   id="icon-button-file"
@@ -155,17 +157,15 @@ class App extends Component {
                   onChange={this.handleImageChange}
                 />
 
-                <label htmlFor="icon-button-file" style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Label htmlFor="icon-button-file" style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   {imagePreviewUrl ? (
-                    <img
-                      src={imagePreviewUrl}
-                      alt="Preview"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
+                    <Avatar className="h-full w-full">
+                      <AvatarImage src={imagePreviewUrl} alt="Preview" className="object-cover" />
+                    </Avatar>
                   ) : (
                     <center><CloudUploadIcon style={{ fontSize: 60, color: '#888' }} /></center>
                   )}
-                </label>
+                </Label>
                 {imagePreviewUrl && (
                   <Tooltip title="Submit">
                     <IconButton style={{ position: 'absolute', bottom: 5, right: 5, backgroundColor: 'white' }} onClick={this.handleSubmit}>

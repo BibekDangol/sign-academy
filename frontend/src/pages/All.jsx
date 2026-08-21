@@ -90,56 +90,60 @@ const AttendanceRecords = () => {
   const uniqueEmails = Array.from(new Set(records.map(record => record.user_email)));
 
   return (
-    <div className='new' ><br />
-      <h2 style={{ textAlign: "center", marginLeft:"20px"}}>Attendance Records</h2><br />
-      {/* Render filter options */}
-      <div style={{ marginBottom: '20px', marginLeft: '20px' }}>
-        <label style={{marginRight: '10px'}}>Filter by Email:</label>
-        <Select value={selectedEmail} onChange={handleEmailChange}>
-          <MenuItem value="">All</MenuItem>
-          {uniqueEmails.map((email, index) => (
-            <MenuItem key={index} value={email}>{email}</MenuItem>
-          ))}
-        </Select>
-      </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <div>
-          <TableContainer component={Paper} style={{ margin: '0 auto', width: '90vw' }}>
-            <Table aria-label="attendance records table">
-              <TableHead>
-                <TableRow>
-                  <TableCell style={{ fontWeight: 'bold', border: '1px solid black' }}>User Id</TableCell>
-                  <TableCell style={{ fontWeight: 'bold', border: '1px solid black' }}>Full Name</TableCell>
-                  <TableCell style={{ fontWeight: 'bold', border: '1px solid black' }}>Email</TableCell>
-                  <TableCell style={{ fontWeight: 'bold', border: '1px solid black' }}>Login Date</TableCell>
-                  <TableCell style={{ fontWeight: 'bold', border: '1px solid black' }}>Login Time</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredRecords.map(record => (
-                  <TableRow key={record.id}>
-                    <TableCell style={{ border: '1px solid black' }}>{record.user}</TableCell>
-                    <TableCell style={{ border: '1px solid black' }}>{record.user_full_name}</TableCell>
-                    <TableCell style={{ border: '1px solid black' }}>{record.user_email}</TableCell>
-                    <TableCell style={{ border: '1px solid black' }}>{record.login_time.split(' ')[0]}</TableCell>
-                    <TableCell style={{ border: '1px solid black' }}>{record.login_time.split(' ')[1]}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div style={{ textAlign: 'center', marginTop: '20px' }}><br />
-              <Button variant="contained" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>Previous</Button>
-              <span style={{ margin: '0 20px', fontSize: '16px' }}>Page {currentPage} of {totalPages}</span>
-              <Button variant="contained" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>Next</Button>
-            </div>
-          )}
+    <div className="bg-[url('./pages/img/image4.png')] min-h-screen pt-[100px] p-5" ><br />
+      <div className="mx-auto w-full max-w-[1100px]">
+        <h2 style={{ textAlign: "center", marginLeft:"20px"}}>Attendance Records</h2><br />
+        {/* Render filter options */}
+        <div style={{ marginBottom: '20px', marginLeft: '20px' }}>
+          <label style={{marginRight: '10px'}}>Filter by Email:</label>
+          <Select value={selectedEmail} onChange={handleEmailChange}>
+            <MenuItem value="">All</MenuItem>
+            {uniqueEmails.map((email, index) => (
+              <MenuItem key={index} value={email}>{email}</MenuItem>
+            ))}
+          </Select>
         </div>
-      )}
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <div>
+            <div className="overflow-x-auto">
+              <TableContainer component={Paper} style={{ margin: '0 auto', width: '100%' }}>
+                <Table aria-label="attendance records table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: 'bold', border: '1px solid black' }}>User Id</TableCell>
+                      <TableCell style={{ fontWeight: 'bold', border: '1px solid black' }}>Full Name</TableCell>
+                      <TableCell style={{ fontWeight: 'bold', border: '1px solid black' }}>Email</TableCell>
+                      <TableCell style={{ fontWeight: 'bold', border: '1px solid black' }}>Login Date</TableCell>
+                      <TableCell style={{ fontWeight: 'bold', border: '1px solid black' }}>Login Time</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {filteredRecords.map(record => (
+                      <TableRow key={record.id}>
+                        <TableCell style={{ border: '1px solid black' }}>{record.user}</TableCell>
+                        <TableCell style={{ border: '1px solid black' }}>{record.user_full_name}</TableCell>
+                        <TableCell style={{ border: '1px solid black' }}>{record.user_email}</TableCell>
+                        <TableCell style={{ border: '1px solid black' }}>{record.login_time.split(' ')[0]}</TableCell>
+                        <TableCell style={{ border: '1px solid black' }}>{record.login_time.split(' ')[1]}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div style={{ textAlign: 'center', marginTop: '20px' }}><br />
+                <Button variant="contained" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>Previous</Button>
+                <span style={{ margin: '0 20px', fontSize: '16px' }}>Page {currentPage} of {totalPages}</span>
+                <Button variant="contained" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>Next</Button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,7 +1,10 @@
 import React, { useState, useContext } from 'react';
 import swal from 'sweetalert2';
 import AuthContext from '../context/AuthContext'; // Importing AuthContext
-import './New.css';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 
 const LeaveApplication = () => {
   const { authTokens } = useContext(AuthContext); // Accessing authTokens from AuthContext
@@ -64,27 +67,29 @@ const LeaveApplication = () => {
   };
 
   return (
-    <div className='hlo'>
-      <h2 style={{paddingLeft:'650px'}}>Apply for Leave</h2><br /><br />
-      <form onSubmit={handleSubmit} style={{paddingLeft:'300px', paddingRight:'300px'}}>
-        <div>
-          <label>User Id:</label>
-          <input type="text" name="user" value={formData.user} onChange={handleInputChange} required />
-        </div>
-        <div>
-          <label>Start Date:</label>
-          <input type="date" name="start_date" value={formData.start_date} onChange={handleInputChange} required />
-        </div>
-        <div>
-          <label>End Date:</label>
-          <input type="date" name="end_date" value={formData.end_date} onChange={handleInputChange} required />
-        </div>
-        <div>
-          <label>Reason:</label>
-          <textarea name="reason" class="custom-textarea" value={formData.reason} onChange={handleInputChange} required></textarea>
-        </div><br />
-        <center><button type="submit">Apply</button></center>
-      </form>
+    <div className="min-h-screen pt-[100px] bg-[url('./pages/img/image4.png')]">
+      <div className="mx-auto w-full max-w-[1000px] px-4">
+        <h2 style={{textAlign:'center'}}>Apply for Leave</h2><br /><br />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label>User Id:</Label>
+            <Input type="text" name="user" value={formData.user} onChange={handleInputChange} required className="w-full" />
+          </div>
+          <div className="space-y-2">
+            <Label>Start Date:</Label>
+            <Input type="date" name="start_date" value={formData.start_date} onChange={handleInputChange} required className="w-full" />
+          </div>
+          <div className="space-y-2">
+            <Label>End Date:</Label>
+            <Input type="date" name="end_date" value={formData.end_date} onChange={handleInputChange} required className="w-full" />
+          </div>
+          <div className="space-y-2">
+            <Label>Reason:</Label>
+            <Textarea name="reason" className="w-full max-w-[930px] h-[80px]" value={formData.reason} onChange={handleInputChange} required />
+          </div>
+          <center><Button type="submit" className="bg-[#0fb400] hover:bg-[#0bbf3a] text-white">Apply</Button></center>
+        </form>
+      </div>
     </div>
   );
 };

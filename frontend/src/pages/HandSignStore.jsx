@@ -3,8 +3,8 @@ import * as handpose from '@tensorflow-models/handpose';
 import * as fp from 'fingerpose';
 import Handsigns from './gesturestore';  
 import Navbar from './Navbar';           
-import Footer from './footer1';           
-import './HandSignStore.css';
+import Footer from './footer1';
+import { Button } from "@/components/ui/button";           
 
 const HandSignStore = () => {
   const videoRef = useRef(null);
@@ -130,37 +130,37 @@ const HandSignStore = () => {
   };
 
   return (
-    <div className="hand-sign-store">
+    <div className="flex flex-col min-h-screen">
       <Navbar />
 
       {/* Video and Chart Side-by-side */}
-      <div className="video-chart-container">
+      <div className="flex flex-col md:flex-row justify-center items-stretch md:items-start gap-[30px] mt-5 px-4 md:px-0">
         {/* Left: Video */}
-        <div className="video-container">
-          <div className="video-inner">
-            <video ref={videoRef} className="video-feed" autoPlay muted playsInline />
-            <canvas ref={canvasRef} className="video-canvas" />
+        <div className="flex-grow flex justify-center items-center bg-[#f8f8f8] p-5 border-[5px] border-solid border-[rgb(13,13,13)] rounded-[10px]">
+          <div className="relative w-full max-w-[640px] aspect-[4/3]">
+            <video ref={videoRef} className="w-full h-full border-[5px] border-solid border-[rgb(13,13,13)] rounded-[10px] object-cover" autoPlay muted playsInline />
+            <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full pointer-events-none" />
           </div>
         </div>
 
         {/* Right: Static Chart Image */}
-        <div className="side-container">
+        <div className="bg-[#f8f8f8] p-5 border-[5px] border-solid border-[rgb(13,13,13)] rounded-[10px] flex justify-center items-center">
           <img 
             src="/images/sign image.png" 
             alt="Hand Sign Chart" 
-            className="sign-chart" 
+            className="w-full max-w-[400px] h-auto rounded-[10px]" 
           />
         </div>
       </div>
 
       {/* Letters and Controls */}
-      <div className="text-container">
-        <div className="letters-display">
+      <div className="my-5 mx-auto text-center">
+        <div className="text-2xl mb-[10px] font-bold">
           {letters.join(' ')}
         </div>
-        <div className="controls">
-          <button className="btn backspace-btn" onClick={handleBackspace}>Backspace</button>
-          <button className="btn clear-btn" onClick={handleClear}>Clear</button>
+        <div className="flex flex-wrap justify-center gap-[10px]">
+          <Button className="px-5 py-[10px] text-base border-none rounded-[5px] bg-[#007bff] text-white cursor-pointer hover:bg-[#0056b3] backspace-btn" onClick={handleBackspace}>Backspace</Button>
+          <Button className="px-5 py-[10px] text-base border-none rounded-[5px] bg-[#007bff] text-white cursor-pointer hover:bg-[#0056b3] clear-btn" onClick={handleClear}>Clear</Button>
         </div>
       </div>
 

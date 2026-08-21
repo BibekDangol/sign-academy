@@ -5,7 +5,6 @@ import Webcam from 'react-webcam';
 import { drawHand } from './utilities';
 import { createModel, predictSign } from './sign_detection_model';
 import Navbar from './Navbar';
-import './Contact.css';  // Changed to Contact.css
 
 const Contact = () => {
   const webcamRef = useRef(null);
@@ -80,30 +79,30 @@ const Contact = () => {
   }, [loading, model, error]);
 
   return (
-    <div className="contact-container">
+    <div className="flex flex-col min-h-screen bg-[#f5f5f5]">
       <Navbar />
       <div className="main-content">
         <h2 className="title">Real-Time Hand Sign Detection</h2>
         
-        {error && <div className="error-message">{error}</div>}
+        {error && <div className="text-[#e74c3c] p-4 bg-[#fdeded] rounded mb-4">{error}</div>}
         
-        <div className="webcam-container">
+        <div className="relative w-[calc(100%-2rem)] max-w-[640px] mx-auto mb-8">
           {loading ? (
-            <div className="loading-spinner">
-              <div className="spinner"></div>
+            <div className="flex flex-col items-center gap-4 p-8">
+              <div className="w-10 h-10 border-4 border-[#f3f3f3] border-t-[#3498db] rounded-full animate-spin"></div>
               <p>Initializing models...</p>
             </div>
           ) : (
             <>
               <Webcam
                 ref={webcamRef}
-                className="webcam-feed"
+                className="!w-full !h-auto rounded-lg"
                 mirrored={true}
                 screenshotFormat="image/jpeg"
               />
               <canvas
                 ref={canvasRef}
-                className="landmark-canvas"
+                className="!w-full !h-auto rounded-lg absolute top-0 left-0 pointer-events-none"
               />
             </>
           )}
@@ -111,7 +110,7 @@ const Contact = () => {
 
         {prediction && (
           <div className="prediction-banner">
-            Detected Sign: <span className="sign-text">{prediction}</span>
+            Detected Sign: <span className="text-[#3498db] font-bold">{prediction}</span>
           </div>
         )}
       </div>

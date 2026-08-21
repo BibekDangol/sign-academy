@@ -6,7 +6,6 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import bgi from './img/image4.png';
-import './CourseMoreInfoPage.css'; // Create this CSS file
 
 const CourseMoreInfoPage = () => {
   const { courseId } = useParams();
@@ -69,19 +68,19 @@ const CourseMoreInfoPage = () => {
   };
   
 
-  if (loading) return <p className="loading">Loading course details...</p>;
-  if (error) return <p className="error">{error}</p>;
+  if (loading) return <p className="text-center text-[1.3rem] text-white mt-[100px]">Loading course details...</p>;
+  if (error) return <p className="text-center text-[1.3rem] text-white mt-[100px]">{error}</p>;
 
   return (
-    <div className="course-more-info-page" style={{ backgroundImage: `url(${bgi})` }}>
+    <div className="bg-cover bg-center bg-no-repeat min-h-screen flex flex-col" style={{ backgroundImage: `url(${bgi})` }}>
       <Navbar />
 
-      <div className="content-wrapper">
-        <Typography variant="h3" className="course-title">
+      <div className="pt-[100px] px-5 pb-10 max-w-[1000px] mx-auto flex-1">
+        <Typography variant="h3" className="text-center text-white text-2xl md:text-[2.5rem] font-bold mb-10 [text-shadow:2px_2px_6px_rgba(0,0,0,0.4)]">
           More Info: {course.title}
         </Typography>
 
-        <Box className="video-container">
+        <Box className="mb-10">
           <ReactPlayer 
             url={course.video_url}
             controls
@@ -90,19 +89,19 @@ const CourseMoreInfoPage = () => {
           />
         </Box>
 
-        <div className="comment-section">
-          <Typography variant="h5" className="comment-heading">
+        <div className="bg-white/90 p-4 md:p-[30px] rounded-[10px] shadow-[0px_4px_15px_rgba(0,0,0,0.1)]">
+          <Typography variant="h5" className="font-bold mb-5 text-[#333] text-center">
             Recent Comments
           </Typography>
 
           {/* Comment List */}
           {comments.length === 0 ? (
-            <Typography className="no-comments">No comments yet. Be the first to comment!</Typography>
+            <Typography className="text-center text-[#777] mb-5">No comments yet. Be the first to comment!</Typography>
           ) : (
             comments.map((comment, index) => (
-              <Card key={index} className="comment-card">
+              <Card key={index} className="mb-[15px] bg-white/95">
                 <CardContent>
-                  <Typography variant="body1" className="comment-text">
+                  <Typography variant="body1" className="text-[#444] text-base">
                     {comment.text}
                   </Typography>
                 </CardContent>
@@ -119,13 +118,13 @@ const CourseMoreInfoPage = () => {
             label="Add a comment"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="comment-input"
+            className="mt-5 mb-2.5"
           />
-          <Button 
-            variant="contained" 
-            color="primary" 
+          <Button
+            variant="contained"
+            color="primary"
             onClick={handleAddComment}
-            className="post-button"
+            className="block ml-auto"
           >
             Post Comment
           </Button>

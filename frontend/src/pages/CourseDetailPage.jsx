@@ -4,7 +4,10 @@ import axios from 'axios';
 import AuthContext from '../context/AuthContext';
 import Navbar from '../pages/Navbar';
 import Footer from '../pages/Footer';
-import './CourseDetailPage.css';
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
 
 const CourseDetailPage = () => {
   const { courseId, lessonId } = useParams();
@@ -103,7 +106,7 @@ const CourseDetailPage = () => {
     }
 
     return (
-      <video width="100%" height="auto" controls>
+      <video className="w-full rounded-md" width="100%" height="auto" controls>
         <source src={getFullVideoUrl()} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
@@ -113,60 +116,62 @@ const CourseDetailPage = () => {
   return (
     <div>
       <Navbar />
-      <div className="course-detail-container">
+      <div className="max-w-[1000px] mx-auto p-5">
         {loading ? (
           <p>Loading course and lesson details...</p>
         ) : course && lesson ? (
           <>
-            <div className="video-banner">
+            <div>
               {renderVideoContent()}
             </div>
 
-            <div className="video-meta">
+            <div className="mt-5">
               <h2>{lesson.title}</h2>
-              <div className="stats-bar">
+              <div className="flex flex-wrap gap-5 my-2.5 text-sm text-[#555]">
                 <span>👥 {course.enrolled_users || '1,702'}</span>
                 <span>👁️ {course.views || '1,503'}</span>
                 <span>📅 {new Date(course.created_at).toLocaleDateString()}</span>
                 <span>📚 Course: {course.title}</span>
               </div>
-              <div className="course-description">
+              <div className="mt-5 text-base leading-[1.6]">
                 <p>{course.description}</p>
               </div>
             </div>
 
-            <div className="review-section">
-              <h3>Leave a Review</h3>
-              <form onSubmit={handleReviewSubmit}>
-                <textarea
+            <div className="mt-[50px] pt-5 border-t border-[#ccc]">
+              <h3 className="mb-2.5">Leave a Review</h3>
+              <form className="mb-[30px]" onSubmit={handleReviewSubmit}>
+                <Textarea
                   value={reviewText}
                   onChange={(e) => setReviewText(e.target.value)}
                   placeholder="Write your thoughts about this lesson..."
                   rows="4"
-                  className="review-textarea"
+                  className="w-full p-3 text-sm rounded border border-[#ccc] resize-y mb-2.5"
                   required
                 />
-                <button type="submit" className="btn blue">Submit Review</button>
+                <Button type="submit" className="bg-[#007bff] text-white py-2 px-4 rounded cursor-pointer transition-colors duration-300 hover:bg-[#0056b3]">Submit Review</Button>
               </form>
 
               <h4 style={{ marginTop: '30px' }}>Reviews</h4>
               {reviews.length === 0 ? (
                 <p>No reviews yet.</p>
               ) : (
-                <ul className="review-list">
+                <ul className="list-none pl-0 mt-5 flex flex-col gap-4">
                   {reviews.map((review) => (
-                    <li key={review.id} className="review-item">
-                      <div className="review-user">
-                        <div className="review-user-avatar">
-                          {review.user?.username?.charAt(0).toUpperCase() || '?'}
-                        </div>
-                        <div className="review-user-info">
-                          <span className="username">{review.user?.username || 'Anonymous'}</span>
-                          <span className="date">{new Date(review.created_at).toLocaleString()}</span>
+                    <Card key={review.id} className="bg-white border border-[#e0e0e0] rounded-lg py-[15px] px-5 shadow-[0_2px_6px_rgba(0,0,0,0.04)] transition-shadow duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+                      <div className="flex items-center gap-3 mb-2.5">
+                        <Avatar className="w-10 h-10">
+                          <AvatarFallback className="bg-[#007bff] text-white font-bold text-base">
+                            {review.user?.username?.charAt(0).toUpperCase() || '?'}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-sm text-[#222]">{review.user?.username || 'Anonymous'}</span>
+                          <span className="text-xs text-[#777]">{new Date(review.created_at).toLocaleString()}</span>
                         </div>
                       </div>
-                      <p>{review.text}</p>
-                    </li>
+                      <p className="m-0 text-[15px] leading-[1.6] text-[#444]">{review.text}</p>
+                    </Card>
                   ))}
                 </ul>
               )}

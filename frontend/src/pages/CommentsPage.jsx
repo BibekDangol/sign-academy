@@ -1,6 +1,5 @@
 // import React, { useState, useEffect } from "react";
 // import axios from "axios";
-// import "./pageStyles.css";
 
 // const CommentsPage = () => {
 //   const [comments, setComments] = useState([]);

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSpring, animated } from 'react-spring';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import Footer from './Footer';
 
 const Article = () => {
@@ -32,45 +34,51 @@ const Article = () => {
           Unlock the power of accessible education. Learn sign language, improve communication skills, 
           and access inclusive learning materials tailored for the Deaf and hard-of-hearing.
         </p>
-        <Link to="/dashboard">
-          <button style={{ backgroundColor: '#0dd943', color: 'white', padding: '20px 30px', fontSize: '1.2rem', borderRadius: '50px', border: 'none', cursor: 'pointer', textDecoration: 'none' }}>
+        <Button asChild className="h-auto rounded-full bg-[#0fb400] hover:bg-[#0bbf3a] px-[30px] py-5 text-lg text-white">
+          <Link to="/dashboard">
             Get Started
-          </button>
-        </Link>
+          </Link>
+        </Button>
       </div>
 
       <div style={{ padding: '0 40px', textAlign: 'center' }}>
         <animated.div style={{ ...fade, marginBottom: '50px' }}>
-          <div style={{ backgroundColor: 'white', border: '1px solid black', borderRadius: '10px', padding: '20px' }}>
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#333' }}>Why Inclusive Learning?</h3>
-            <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#555' }}>
-              Learning should be accessible to everyone. Our platform empowers Deaf learners 
-              by providing visual learning experiences, sign language courses, and interactive content 
-              that enhances understanding without relying on spoken language.
-            </p>
-          </div>
+          <Card className="border-black bg-white shadow-none">
+            <CardContent className="p-5">
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#333' }}>Why Inclusive Learning?</h3>
+              <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#555' }}>
+                Learning should be accessible to everyone. Our platform empowers Deaf learners 
+                by providing visual learning experiences, sign language courses, and interactive content 
+                that enhances understanding without relying on spoken language.
+              </p>
+            </CardContent>
+          </Card>
         </animated.div>
 
         <animated.div style={{ ...fade, marginBottom: '50px' }}>
-          <div style={{ backgroundColor: 'white', border: '1px solid black', borderRadius: '10px', padding: '20px' }}>
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#333' }}>Can Deaf learners benefit from online education?</h3>
-            <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#555' }}>
-              Absolutely! With visual-based lessons, video courses in sign language, and interactive quizzes, 
-              Deaf students can access knowledge without barriers. Our platform supports self-paced learning 
-              tailored to individual needs.
-            </p>
-          </div>
+          <Card className="border-black bg-white shadow-none">
+            <CardContent className="p-5">
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#333' }}>Can Deaf learners benefit from online education?</h3>
+              <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#555' }}>
+                Absolutely! With visual-based lessons, video courses in sign language, and interactive quizzes, 
+                Deaf students can access knowledge without barriers. Our platform supports self-paced learning 
+                tailored to individual needs.
+              </p>
+            </CardContent>
+          </Card>
         </animated.div>
 
         <animated.div style={{ ...fade }}>
-          <div style={{ backgroundColor: 'white', border: '1px solid black', borderRadius: '10px', padding: '20px' }}>
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#333' }}>How is this different from traditional learning?</h3>
-            <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#555' }}>
-              Traditional learning methods often rely on spoken instruction, making them inaccessible to many Deaf learners. 
-              Our LMS is built with inclusivity in mind, featuring sign language videos, subtitles, and interactive exercises 
-              to ensure effective learning for everyone.
-            </p>
-          </div>
+          <Card className="border-black bg-white shadow-none">
+            <CardContent className="p-5">
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', color: '#333' }}>How is this different from traditional learning?</h3>
+              <p style={{ fontSize: '1rem', lineHeight: '1.6', color: '#555' }}>
+                Traditional learning methods often rely on spoken instruction, making them inaccessible to many Deaf learners. 
+                Our LMS is built with inclusivity in mind, featuring sign language videos, subtitles, and interactive exercises 
+                to ensure effective learning for everyone.
+              </p>
+            </CardContent>
+          </Card>
         </animated.div>
       </div><br /><br /><br /><br />
 

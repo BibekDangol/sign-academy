@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../pages/Navbar';
 import Footer from '../pages/footer1';
 import AuthContext from '../context/AuthContext';
-import './CoursePage.css';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 const CoursesPage = () => {
   const [courses, setCourses] = useState([]);
@@ -99,7 +100,7 @@ const CoursesPage = () => {
   return (
     <div>
       <Navbar />
-      <main className="main-wrapper">
+      <main className="py-5 bg-[#f4f4f4] min-h-[calc(100vh-200px)]">
         {selectedCourseId === null ? (
           courses.map((course) => {
             const lessonCount = getLessonCount(course.id);
@@ -108,79 +109,79 @@ const CoursesPage = () => {
             ).length;
 
             return (
-              <div className="course-card" key={course.id}>
-                <div className="course-left">
-                  <p className="course-label">COURSE</p>
-                  <h2>{course.title}</h2>
-                  <p className="chapters">Chapters</p>
+              <Card className="flex flex-col md:flex-row bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden my-6 mx-auto max-w-[95%] [font-family:'Segoe_UI',sans-serif] transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(0,0,0,0.15)]" key={course.id}>
+                <div className="bg-[#00acc1] p-4 md:p-[30px] w-full md:w-[30%] text-white flex flex-col justify-center text-left">
+                  <p className="font-semibold text-sm tracking-[1px] uppercase mb-3">COURSE</p>
+                  <h2 className="text-xl md:text-[26px] leading-[1.2] mb-2">{course.title}</h2>
+                  <p className="text-base font-light">Chapters</p>
                 </div>
-                <div className="course-right">
-                  <p className="chapter-label">CHAPTERS: {lessonCount}</p>
-                  <h3 className="course-description">{course.description}</h3>
-                  <div className="progress-bar-container">
+                <div className="bg-white p-4 md:p-[30px] w-full md:w-[70%] flex flex-col justify-between">
+                  <p className="text-[#00acc1] font-bold text-sm mb-[5px]">CHAPTERS: {lessonCount}</p>
+                  <h3 className="text-lg text-[#333333] leading-[1.5] mb-5">{course.description}</h3>
+                  <div className="h-1.5 bg-[#e0e0e0] rounded-[3px] overflow-hidden mb-2">
                     <div
-                      className="progress-bar"
+                      className="h-1.5 bg-[#00acc1] rounded-[3px] transition-[width] duration-[400ms] ease-in-out"
                       style={{ width: `${(courseCompletedCount / lessonCount) * 100}%` }}
                     ></div>
                   </div>
-                  <p className="progress-text">
+                  <p className="text-sm text-[#666] self-end">
                     {courseCompletedCount}/{lessonCount} Lessons Completed
                   </p>
-                  <button
-                    className="continue-button"
+                  <Button
+                    className="bg-[#00acc1] text-white py-2.5 px-6 text-base font-medium rounded-[30px] cursor-pointer transition-colors duration-300 self-end mt-2.5 hover:bg-[#008ba3]"
                     onClick={() => setSelectedCourseId(course.id)}
                   >
                     Continue
-                  </button>
-                  <button
-                    className="attendance-button"
+                  </Button>
+                  <Button
+                    className="mt-2.5 bg-[#f0ad4e] text-white py-2.5 px-[15px] cursor-pointer rounded-[5px] font-bold hover:bg-[#ec971f]"
                     onClick={() => handleAttendance(course.id)}
                   >
                     Course Attendance
-                  </button>
+                  </Button>
                 </div>
-              </div>
+              </Card>
             );
           })
         ) : (
-          <div className="course-detail">
-            <h2>{selectedCourse.title} – Lessons</h2>
-            <button onClick={() => setSelectedCourseId(null)}>← Back to Courses</button>
+          <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-4 md:p-[30px] my-5 mx-auto max-w-[90%] [font-family:'Segoe_UI',sans-serif] transition-all duration-300">
+            <h2 className="text-xl md:text-[26px] mb-5 text-[#00acc1]">{selectedCourse.title} – Lessons</h2>
+            <Button className="bg-[#00acc1] text-white py-2.5 px-[18px] text-sm rounded-[20px] cursor-pointer mb-5 transition-colors duration-300 hover:bg-[#008ba3]" onClick={() => setSelectedCourseId(null)}>← Back to Courses</Button>
             {selectedLessons.map((lesson, index) => (
-              <div className="lesson-card" key={lesson.id}>
-                <div className="lesson-left">
-                  <p className="lesson-label">LESSON</p>
-                  <h3>{lesson.title}</h3>
+              <Card className="flex flex-col md:flex-row rounded-xl overflow-hidden my-5 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.08)] [font-family:'Segoe_UI',sans-serif]" key={lesson.id}>
+                <div className="bg-[#4dd0e1] text-white p-5 w-full md:w-[35%] flex flex-col justify-center">
+                  <p className="text-sm uppercase mb-2">LESSON</p>
+                  <h3 className="text-lg md:text-[22px] leading-[1.2]">{lesson.title}</h3>
                 </div>
-                <div className="lesson-right">
-                  <p className="lesson-number">LESSON {index + 1}</p>
-                  <p className="lesson-status">
+                <div className="p-5 w-full md:w-[65%] relative">
+                  <p className="text-sm text-[#4dd0e1] font-bold mb-2">LESSON {index + 1}</p>
+                  <p className="text-base mb-5">
                     {completedLessons[lesson.id]?.completed
                       ? 'You have completed this lesson.'
                       : 'This lesson is not completed yet.'}
                   </p>
-                  <div className="lesson-actions">
-                    <button
-                      className="btn green"
+                  <div className="flex gap-2.5 mb-2.5">
+                    <Button
+                      className="bg-[#66bb6a] text-white py-2.5 px-[18px] rounded-[20px] text-sm cursor-pointer mb-5 transition-colors duration-300 hover:bg-[#43a047]"
                       onClick={() => toggleCompletion(lesson.id)}
                     >
                       {completedLessons[lesson.id]?.completed
                         ? 'Mark as Incomplete'
                         : 'Mark as Done'}
-                    </button>
-                    <button
-                      className="btn blue"
+                    </Button>
+                    <Button
+                      className="bg-[#4dd0e1] text-white py-2.5 px-[18px] rounded-[20px] text-sm cursor-pointer mb-5 transition-colors duration-300 hover:bg-[#00acc1]"
                       onClick={() => navigate(`/course/${selectedCourse.id}/lesson/${lesson.id}`)}
                     >
                       Start
-                    </button>
+                    </Button>
                   </div>
                   {/* <span className="lesson-time">4 min</span> */}
                   {completedLessons[lesson.id]?.completed && (
-                    <span className="lesson-check">✔</span>
+                    <span className="absolute top-[14px] right-5 text-[#4caf50] text-2xl">✔</span>
                   )}
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         )}

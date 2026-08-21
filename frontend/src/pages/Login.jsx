@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import AuthContext from '../context/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import backgroundImage from './img/loginimg.jpg';
 import Navbar from './Navbar1';
 import Footer from './Footer'; // ✅ Include Footer
@@ -79,11 +82,11 @@ const Login = () => {
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
         }}>
           <h1 style={{ marginBottom: '20px' }}>Login</h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
-            <label htmlFor="email">Email:</label>
+            <Label htmlFor="email">Email:</Label>
             <div style={{ position: 'relative' }}>
-              <input
+              <Input
                 type="email"
                 id="email"
                 value={email}
@@ -91,12 +94,9 @@ const Login = () => {
                   setEmail(e.target.value);
                   validateEmail(e.target.value);
                 }}
+                className="w-full"
                 style={{
-                  border: emailValid ? '2px solid green' : emailError ? '2px solid red' : '1px solid #ccc',
-                  borderRadius: '4px',
-                  padding: '10px',
-                  width: '100%',
-                  marginBottom: '10px'
+                  border: emailValid ? '2px solid green' : emailError ? '2px solid red' : '1px solid #ccc'
                 }}
               />
               {emailValid && (
@@ -112,8 +112,8 @@ const Login = () => {
             {emailError && <p style={{ color: 'red' }}>{emailError}</p>}
 
             {/* Password */}
-            <label htmlFor="password">Password:</label>
-            <input
+            <Label htmlFor="password">Password:</Label>
+            <Input
               type="password"
               id="password"
               value={password}
@@ -121,29 +121,17 @@ const Login = () => {
                 setPassword(e.target.value);
                 validatePassword(e.target.value);
               }}
+              className="w-full"
               style={{
-                border: passwordValid ? '2px solid green' : passwordError ? '2px solid red' : '1px solid #ccc',
-                borderRadius: '4px',
-                padding: '10px',
-                width: '100%',
-                marginBottom: '10px'
+                border: passwordValid ? '2px solid green' : passwordError ? '2px solid red' : '1px solid #ccc'
               }}
             />
             {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>}
 
             {/* Submit Button */}
-            <button type="submit" style={{
-              width: '100%',
-              backgroundColor: '#28a745',
-              color: '#fff',
-              padding: '10px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              marginTop: '10px'
-            }}>
+            <Button type="submit" className="w-full bg-[#0fb400] hover:bg-[#0bbf3a] text-white">
               Login
-            </button>
+            </Button>
 
             <p style={{ marginTop: '15px', fontSize: '14px' }}>
               Don’t have an account? <Link to="/register" style={{ color: '#007bff' }}>Register</Link>
