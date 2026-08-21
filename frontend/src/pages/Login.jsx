@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import backgroundImage from './img/loginimg.jpg';
-import Navbar from './Navbar1';
+import Navbar from './Navbar';
 import Footer from './Footer'; // ✅ Include Footer
 
 const Login = () => {

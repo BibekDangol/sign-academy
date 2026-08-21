@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import backgroundImage from './img/img4.jpg'; // Background image
-import Navbar from './Navbar1'; // Use your desired navbar file
+import Navbar from './Navbar';
 import Footer from './Footer';  // ✅ Import footer
 
 const Register = () => {

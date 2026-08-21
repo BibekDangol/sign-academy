@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../context/AuthContext';
-import Navbar1 from './Navbar1';
+import Navbar from './Navbar';
 import Footer from './Footer';
 import bgi from './img/cover.jpg';
 import { Button } from '@/components/ui/button';
@@ -47,7 +47,7 @@ const Home = () => {
 
   return (
     <div className="[font-family:'Segoe_UI',sans-serif] text-[#222] bg-[#eeebeb]">
-      <Navbar1 />
+      <Navbar />
 
       {/* Hero Section */}
       <section className="bg-cover bg-center h-[90vh] flex items-center justify-center relative text-center text-white" style={{ backgroundImage: `url(${bgi})` }}>

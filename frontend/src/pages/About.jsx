@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Navbar1 from './Navbar1';
+import Navbar from './Navbar';
 import aboutBg from './img/image4.png';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 const About = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar1 /> 
+      <Navbar /> 
 
       <main className="flex-1 flex justify-center items-center py-10 px-5 bg-cover bg-center" style={{ backgroundImage: `url(${aboutBg})` }}>
         <div className="max-w-[800px] bg-white/90 p-4 md:p-10 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.15)] text-center">
