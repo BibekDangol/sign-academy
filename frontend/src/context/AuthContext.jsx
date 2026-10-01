@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
         position: 'bottom-right',
         timerProgressBar: true,
         showConfirmButton: false,
-        
+
       });
     } else {
       swal.fire({

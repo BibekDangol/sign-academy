@@ -3,7 +3,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import AuthContext from "../context/AuthContext";
 import Navbar from "./Navbar";
-import Footer from "./footer1";
+import Footer from "./Footer";
 
 import {
   Table, TableBody, TableCell, TableContainer,

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
 import Navbar from "../pages/Navbar"; // ✅ Adjust path as needed
-import Footer from "../pages/footer1"; // ✅ Adjust path as needed
+import Footer from "../pages/Footer"; // ✅ Adjust path as needed
 
 const ProgressPage = () => {
   const [courses, setCourses] = useState([]);

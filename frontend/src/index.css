@@ -76,6 +76,22 @@
     font-size: 1.5rem;
   }
 
+  html,
+  body {
+    scrollbar-width: none;
+    /* Firefox: hide scrollbar, keep scroll */
+    -ms-overflow-style: none;
+    /* IE / Edge legacy */
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;
+    /* Chrome / Safari / Edge: hide scrollbar, keep scroll */
+    width: 0;
+    height: 0;
+  }
+
   /* Legacy globals scoped with :where() (zero specificity) so shadcn
      component utilities always win; unclassed legacy elements keep these styles */
   :where(body p) {

@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { AccountCircle, VpnKey } from '@mui/icons-material';
 import Navbar from './Navbar';
-import Footer from './footer1';
+import Footer from './Footer';
 import bgi from './img/image4.png';
 import Swal from 'sweetalert2';
 import AuthContext from '../context/AuthContext';

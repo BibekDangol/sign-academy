@@ -13,7 +13,7 @@ import Contacts from './pages/Contacts';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import DictionaryPage from './pages/DictonaryPage';
-import CoursesPage from './pages/CoursePage';
+import CoursesPage from './pages/Courses';
 import CourseDetailPage from './pages/CourseDetailPage';
 import LessonVideoPage from './pages/LessonVideoPage';
 import ProgressPage from './pages/ProgressPage';

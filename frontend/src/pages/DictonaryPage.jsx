@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import Footer from "./footer1"; // ✅ Import Footer here
+import Footer from "./Footer"; // ✅ Import Footer here
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {

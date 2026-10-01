@@ -1,12 +1,16 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom'; // ✅ Import Link and useLocation
+import React, { useContext } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import AuthContext from '../context/AuthContext';
 
 function Footer() {
   const location = useLocation();
-  const isHomePage = location.pathname === '/'; // ✅ Check if user is on Home page
+  const { user } = useContext(AuthContext);
+
+  const homePath = user ? '/home2' : '/';
+  const isHomePage = location.pathname === homePath;
 
   return (
     <footer className="bg-[#111] text-white pt-10 px-5 pb-5 font-[Arial,sans-serif]">
@@ -18,16 +22,16 @@ function Footer() {
           <ul className="list-none p-0">
             <li className="mb-[10px]">
               {isHomePage ? (
-                <a href="#courses" className="text-[#ccc] no-underline transition-colors duration-300 hover:text-white">Our Services</a> // ✅ Simple anchor if already on Home
+                <a href="#courses" className="text-[#ccc] no-underline transition-colors duration-300 hover:text-white">Our Services</a>
               ) : (
-                <Link to="/#courses" className="text-[#ccc] no-underline transition-colors duration-300 hover:text-white">Our Services</Link> // ✅ Navigate if not Home
+                <Link to={`${homePath}#courses`} className="text-[#ccc] no-underline transition-colors duration-300 hover:text-white">Our Services</Link>
               )}
             </li>
             <li className="mb-[10px]">
               {isHomePage ? (
                 <a href="#contact" className="text-[#ccc] no-underline transition-colors duration-300 hover:text-white">Contact Us</a>
               ) : (
-                <Link to="/#contact" className="text-[#ccc] no-underline transition-colors duration-300 hover:text-white">Contact Us</Link>
+                <Link to={`${homePath}#contact`} className="text-[#ccc] no-underline transition-colors duration-300 hover:text-white">Contact Us</Link>
               )}
             </li>
           </ul>
@@ -35,7 +39,7 @@ function Footer() {
 
         {/* Connect with Us */}
         <div className="flex-[1_1_250px] min-w-[200px]">
-          <h3 className="text-[1.2rem] mb-[15px] text-[#f0f0f0]">Connect with Us</h3>
+          <h3 className="text-[1.2rem] mb-[15px] text-[#f0f0f0]">Connect widsadasdasdasdasth Us</h3>
           <ul className="list-none p-0">
             <li className="mb-[10px]">
               <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="text-[#ccc] no-underline transition-colors duration-300 hover:text-white">

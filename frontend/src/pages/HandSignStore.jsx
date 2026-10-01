@@ -3,7 +3,7 @@ import * as handpose from '@tensorflow-models/handpose';
 import * as fp from 'fingerpose';
 import Handsigns from './gesturestore';  
 import Navbar from './Navbar';           
-import Footer from './footer1';
+import Footer from './Footer';
 import { Button } from "@/components/ui/button";           
 
 const HandSignStore = () => {

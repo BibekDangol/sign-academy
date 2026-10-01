@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
-import Footer from './footer1';  // ✅ Import Footer component
+import Footer from './Footer';  // ✅ Import Footer component
 import aboutBg from './img/image4.png';
 import { Button } from '@/components/ui/button';
 

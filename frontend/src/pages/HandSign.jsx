@@ -6,10 +6,10 @@ import gestures from "../gestures";
 import Webcam from "react-webcam";
 import { drawHand } from "../utils/drawHand";
 import Navbar from './Navbar';
-import Footer from './footer1'; 
+import Footer from './Footer';
 import { useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography'; 
+import Typography from '@mui/material/Typography';
 
 const HandSign = () => {
   const webcamRef = useRef(null);
@@ -67,7 +67,8 @@ const HandSign = () => {
   }, []);
 
   return (
-    <div className="bg-[#f0f2f5] min-h-screen font-['Segoe_UI',Tahoma,Geneva,Verdana,sans-serif]">
+    // <div className="bg-[#f0f2f5] min-h-screen font-['Segoe_UI',Tahoma,Geneva,Verdana,sans-serif]">
+    <div>
       <Navbar />
 
       <div className="flex flex-col items-center p-4 md:p-8">
@@ -104,7 +105,7 @@ const HandSign = () => {
         </Button>
       </div>
 
-      <Footer /> 
+      <Footer />
     </div>
   );
 };

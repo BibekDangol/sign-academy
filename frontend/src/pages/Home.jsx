@@ -46,15 +46,16 @@ const Home = () => {
   };
 
   return (
-    <div className="[font-family:'Segoe_UI',sans-serif] text-[#222] bg-[#eeebeb]">
+    // <div className="[font-family:'Segoe_UI',sans-serif] text-[#222] bg-[#eeebeb]">
+    <div>
       <Navbar />
 
       {/* Hero Section */}
       <section className="bg-cover bg-center h-[90vh] flex items-center justify-center relative text-center text-white" style={{ backgroundImage: `url(${bgi})` }}>
         <div className="w-[calc(100%-2rem)] max-w-[700px] p-4 md:p-12 rounded-[10px]">
-        <h1 className="text-[3rem] mb-4 max-md:text-[2.5rem]" style={{ color: "white" }}>SIGN Academy</h1>
-        <p className="text-[1.5rem] mb-8 max-md:text-[1.2rem]">Your path to mastering new skills starts here.</p>
-        <Button size="lg" className="text-base hover:bg-brand-dark" onClick={handleStartLearning}>Start Learning</Button>
+          <h1 className="text-[3rem] mb-4 max-md:text-[2.5rem]" style={{ color: "white" }}>SIGN Academy</h1>
+          <p className="text-[1.5rem] mb-8 max-md:text-[1.2rem]">Your path to mastering new skills starts here.</p>
+          <Button size="lg" className="text-base hover:bg-brand-dark" onClick={handleStartLearning}>Start Learning</Button>
         </div>
       </section>
 
@@ -87,7 +88,7 @@ const Home = () => {
             </Card>
           </div>
         </section>
-<hr></hr>
+        <hr></hr>
         {/* Categories Section */}
         <section className="categories-section">
           <h2 className="text-center text-[2rem] mt-12">Categories</h2>
@@ -140,7 +141,7 @@ const Home = () => {
       </main>
       <hr></hr>
       {/* Contact Us Section */}
-      <section className="contact" id ="contact">
+      <section className="contact" id="contact">
         <h2 style={{ textAlign: "center" }}>Contact Us</h2>
         <form className="w-[calc(100%-2rem)] max-w-[600px] my-12 mx-auto p-8 bg-white rounded-[10px] shadow-[0_4px_10px_rgba(0,0,0,0.1)]" onSubmit={handleSubmit}>
           <Input

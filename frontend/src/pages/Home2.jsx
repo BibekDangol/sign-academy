@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../context/AuthContext';
 import Navbar from './Navbar';
-import Footer from './footer1';
+import Footer from './Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import bgi from './img/cover.jpg'; 
+import bgi from './img/cover.jpg';
 
 const Home = () => {
   const { user } = useContext(AuthContext);
@@ -46,7 +46,8 @@ const Home = () => {
   };
 
   return (
-    <div className="[font-family:'Segoe_UI',sans-serif] text-[#222] bg-[#eeebeb]">
+    // <div className="[font-family:'Segoe_UI',sans-serif] text-[#222] bg-[#eeebeb]">
+    <div>
       <Navbar />
 
       {/* Hero Section */}
@@ -87,7 +88,7 @@ const Home = () => {
             </Card>
           </div>
         </section>
-<hr></hr>
+        <hr></hr>
         {/* Categories Section */}
         <section className="categories-section">
           <h2 className="text-center text-[2rem] mt-12">Categories</h2>
@@ -140,8 +141,8 @@ const Home = () => {
       </main>
       <hr></hr>
       {/* Contact Us Section */}
-      <section className="contact" id ="contact">
-      <h2 style={{ textAlign: "center" }}>Contact Us</h2>
+      <section className="contact" id="contact">
+        <h2 style={{ textAlign: "center" }}>Contact Us</h2>
 
         <form className="w-[calc(100%-2rem)] max-w-[600px] my-12 mx-auto p-8 bg-white rounded-[10px] shadow-[0_4px_10px_rgba(0,0,0,0.1)]" onSubmit={handleSubmit}>
           <Input

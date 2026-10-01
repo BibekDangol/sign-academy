@@ -41,17 +41,17 @@ const Navbar = () => {
 
   const links = user
     ? [
-        { to: "/home2", label: "Home" },
-        { to: "/courses", label: "Courses" },
-        { to: "/handsign", label: "HandSign" },
-        { to: "/dictionary", label: "Dictionary" },
-        { to: "/about1", label: "About" },
-      ]
+      { to: "/home2", label: "Home" },
+      { to: "/courses", label: "Courses" },
+      { to: "/handsign", label: "HandSign" },
+      { to: "/dictionary", label: "Dictionary" },
+      { to: "/about1", label: "About" },
+    ]
     : [
-        { to: "/", label: "Home" },
-        { to: "/about", label: "About" },
-        { to: "/login", label: "Courses" },
-      ];
+      { to: "/", label: "Home" },
+      { to: "/about", label: "About" },
+      { to: "/login", label: "Courses" },
+    ];
 
   return (
     <nav className="sticky top-0 z-[1000] w-full border-b border-slate-800 bg-slate-900">
@@ -62,7 +62,7 @@ const Navbar = () => {
           className="flex items-center gap-2 text-white no-underline"
           onClick={() => setMobileOpen(false)}
         >
-          <FaSignLanguage className="text-xl text-slate-300" />
+          <FaSignLanguage className="text-lg" />
           <span className="text-lg  tracking-tight">
             Sign Academy
           </span>
@@ -77,27 +77,23 @@ const Navbar = () => {
           className="hidden max-md:flex flex-col justify-center items-center gap-[5px] w-9 h-9 rounded-md border border-slate-700 hover:bg-white/5 transition-colors duration-150"
         >
           <span
-            className={`block h-[2px] w-5 bg-slate-200 transition-transform duration-200 ${
-              mobileOpen ? "translate-y-[6px] rotate-45" : ""
-            }`}
+            className={`block h-[2px] w-5 bg-slate-200 transition-transform duration-200 ${mobileOpen ? "translate-y-[6px] rotate-45" : ""
+              }`}
           />
           <span
-            className={`block h-[2px] w-5 bg-slate-200 transition-opacity duration-150 ${
-              mobileOpen ? "opacity-0" : "opacity-100"
-            }`}
+            className={`block h-[2px] w-5 bg-slate-200 transition-opacity duration-150 ${mobileOpen ? "opacity-0" : "opacity-100"
+              }`}
           />
           <span
-            className={`block h-[2px] w-5 bg-slate-200 transition-transform duration-200 ${
-              mobileOpen ? "-translate-y-[6px] -rotate-45" : ""
-            }`}
+            className={`block h-[2px] w-5 bg-slate-200 transition-transform duration-200 ${mobileOpen ? "-translate-y-[6px] -rotate-45" : ""
+              }`}
           />
         </button>
 
         {/* Nav content */}
         <div
-          className={`items-center gap-1 max-md:absolute max-md:left-0 max-md:right-0 max-md:top-full max-md:border-t max-md:border-slate-800 max-md:bg-slate-900 max-md:flex-col max-md:items-stretch max-md:p-3 ${
-            mobileOpen ? "max-md:flex" : "max-md:hidden"
-          } flex`}
+          className={`items-center gap-1 max-md:absolute max-md:left-0 max-md:right-0 max-md:top-full max-md:border-t max-md:border-slate-800 max-md:bg-slate-900 max-md:flex-col max-md:items-stretch max-md:p-3 ${mobileOpen ? "max-md:flex" : "max-md:hidden"
+            } flex`}
         >
           <ul className="list-none flex items-center gap-1 max-md:flex-col max-md:items-stretch max-md:gap-0 m-0 p-0">
             {links.map((link) => (
