@@ -1,23 +1,21 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import AuthContext from '../context/AuthContext';
+import './Footer.css';
 
 function Footer() {
   const location = useLocation();
-  const { user } = useContext(AuthContext);
-
-  const homePath = user ? '/home2' : '/';
+  const homePath = '/';
   const isHomePage = location.pathname === homePath;
 
   return (
-    <footer className="bg-[#111] text-white pt-10 px-5 pb-5 font-[Arial,sans-serif]">
-      <div className="flex justify-between flex-wrap gap-[30px] max-w-[1200px] mx-auto max-md:flex-col max-md:items-start max-md:gap-10">
+    <footer className="site-footer">
+      <div className="site-footer-grid">
 
         {/* Useful Links */}
-        <div className="flex-[1_1_250px] min-w-[200px]">
+        <div className="site-footer-column">
           <h3 className="text-[1.2rem] mb-[15px] text-[#f0f0f0]">Useful Links</h3>
           <ul className="list-none p-0">
             <li className="mb-[10px]">
@@ -38,8 +36,8 @@ function Footer() {
         </div>
 
         {/* Connect with Us */}
-        <div className="flex-[1_1_250px] min-w-[200px]">
-          <h3 className="text-[1.2rem] mb-[15px] text-[#f0f0f0]">Connect widsadasdasdasdasth Us</h3>
+        <div className="site-footer-column">
+          <h3>Connect with Us</h3>
           <ul className="list-none p-0">
             <li className="mb-[10px]">
               <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="text-[#ccc] no-underline transition-colors duration-300 hover:text-white">
@@ -65,11 +63,13 @@ function Footer() {
         </div>
 
         {/* Newsletter Subscription */}
-        <div className="flex-[1_1_250px] min-w-[200px]">
-          <h3 className="text-[1.2rem] mb-[15px] text-[#f0f0f0]">Subscribe to Our Newsletter</h3>
+        <div className="site-footer-column">
+          <h3>Our Newsletter</h3>
           <form className="flex flex-col gap-[10px]" onSubmit={(e) => e.preventDefault()}>
             <Input
               type="email"
+              aria-label="Newsletter email address"
+              autoComplete="email"
               placeholder="Enter your email"
               className="p-[10px] border-none rounded w-full"
               required
@@ -83,7 +83,7 @@ function Footer() {
       </div>
 
       {/* Footer Bottom */}
-      <div className="footer-bottom">
+      <div className="site-footer-bottom">
         <p className="text-center mt-[30px] text-[0.9rem] text-[#aaa]">© {new Date().getFullYear()} Sign Academy. All rights reserved.</p>
       </div>
     </footer>

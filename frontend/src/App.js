@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
 
 // Public Pages
 import Home from './pages/Home';
-import Home2 from './pages/Home2';
 import About from './pages/About';
 import About1 from './pages/About1';
 import Contacts from './pages/Contacts';
@@ -43,7 +42,7 @@ const App = () => {
 
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
-          <Route path="/home2" element={<Home2 />} />
+          <Route path="/home2" element={<Navigate to="/" replace />} />
           <Route path="/about" element={<About />} />
           <Route path="/about1" element={<About1 />} />
           <Route path="/contacts" element={<Contacts />} />

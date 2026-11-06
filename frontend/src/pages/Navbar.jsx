@@ -41,7 +41,7 @@ const Navbar = () => {
 
   const links = user
     ? [
-      { to: "/home2", label: "Home" },
+      { to: "/", label: "Home" },
       { to: "/courses", label: "Courses" },
       { to: "/handsign", label: "HandSign" },
       { to: "/dictionary", label: "Dictionary" },
@@ -58,7 +58,7 @@ const Navbar = () => {
       <div className="relative flex justify-between items-center px-5 md:px-8 py-3 flex-wrap">
         {/* Logo */}
         <Link
-          to={user ? "/home2" : "/"}
+          to="/"
           className="flex items-center gap-2 text-white no-underline"
           onClick={() => setMobileOpen(false)}
         >

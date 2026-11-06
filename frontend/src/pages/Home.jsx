@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
+import './Home.css';
 
 const Home = () => {
   const { user } = useContext(AuthContext);
@@ -23,7 +24,7 @@ const Home = () => {
   const [statusMsg, setStatusMsg] = useState('');
 
   const handleStartLearning = () => {
-    navigate('/login');
+    navigate(user ? '/courses' : '/login');
   };
 
   const handleChange = (e) => {
@@ -60,9 +61,9 @@ const Home = () => {
       </section>
 
       {/* Main Content */}
-      <main>
+      <main className="home-content">
         {/* Courses Section */}
-        <section className="courses-section" id="courses">
+        <section className="home-section courses-section" id="courses">
           <h2 className="text-center text-[2rem] mt-12">Popular Courses</h2>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,300px))] justify-center gap-8 p-8">
             <Card className="bg-white rounded-[10px] shadow-[0_4px_10px_rgba(0,0,0,0.08)] text-center transition-transform duration-300 hover:-translate-y-[5px]">
@@ -90,7 +91,7 @@ const Home = () => {
         </section>
         <hr></hr>
         {/* Categories Section */}
-        <section className="categories-section">
+        <section className="home-section categories-section">
           <h2 className="text-center text-[2rem] mt-12">Categories</h2>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,300px))] justify-center gap-8 p-8">
             <Card className="bg-white rounded-[10px] shadow-[0_4px_10px_rgba(0,0,0,0.08)] text-center transition-transform duration-300 hover:-translate-y-[5px]">
@@ -115,7 +116,7 @@ const Home = () => {
         </section>
         <hr></hr>
         {/* Testimonials Section */}
-        <section className="testimonials-section">
+        <section className="home-section testimonials-section">
           <h2 className="text-center text-[2rem] mt-12">Testimonials</h2>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,300px))] justify-center gap-8 p-8">
             <Card className="bg-[#f1f8ff] italic rounded-[10px] shadow-[0_4px_10px_rgba(0,0,0,0.08)] text-center transition-transform duration-300 hover:-translate-y-[5px]">
@@ -141,13 +142,15 @@ const Home = () => {
       </main>
       <hr></hr>
       {/* Contact Us Section */}
-      <section className="contact" id="contact">
+      <section className="home-content home-section contact" id="contact">
         <h2 style={{ textAlign: "center" }}>Contact Us</h2>
         <form className="w-[calc(100%-2rem)] max-w-[600px] my-12 mx-auto p-8 bg-white rounded-[10px] shadow-[0_4px_10px_rgba(0,0,0,0.1)]" onSubmit={handleSubmit}>
           <Input
             className="w-full p-4 mb-4 border border-[#ccc] rounded-md"
             type="text"
             name="name"
+            aria-label="Your Name"
+            autoComplete="name"
             placeholder="Your Name"
             value={contactData.name}
             onChange={handleChange}
@@ -157,6 +160,8 @@ const Home = () => {
             className="w-full p-4 mb-4 border border-[#ccc] rounded-md"
             type="email"
             name="email"
+            aria-label="Your Email"
+            autoComplete="email"
             placeholder="Your Email"
             value={contactData.email}
             onChange={handleChange}
@@ -165,6 +170,7 @@ const Home = () => {
           <Textarea
             className="w-full p-4 mb-4 border border-[#ccc] rounded-md"
             name="message"
+            aria-label="Your Message"
             placeholder="Your Message"
             rows="4"
             value={contactData.message}
@@ -172,7 +178,7 @@ const Home = () => {
             required
           />
           <Button className="w-full bg-brand hover:bg-brand-dark text-white p-4 rounded-md text-base" type="submit">Send</Button>
-          {statusMsg && <p className="mt-4 text-center font-medium">{statusMsg}</p>}
+          {statusMsg && <p role="status" className="mt-4 text-center font-medium">{statusMsg}</p>}
         </form>
       </section>
 
