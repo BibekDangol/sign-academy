@@ -1,3 +1,4 @@
+import PageLayout from '../components/layout/PageLayout';
 import React, { useRef, useState, useEffect } from "react";
 import * as fp from "fingerpose";
 import * as handpose from "@tensorflow-models/handpose";
@@ -5,8 +6,6 @@ import * as tf from "@tensorflow/tfjs";
 import gestures from "../gestures";
 import Webcam from "react-webcam";
 import { drawHand } from "../utils/drawHand";
-import Navbar from './Navbar';
-import Footer from './Footer';
 import { useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -69,7 +68,7 @@ const HandSign = () => {
   return (
     // <div className="bg-[#f0f2f5] min-h-screen font-['Segoe_UI',Tahoma,Geneva,Verdana,sans-serif]">
     <div>
-      <Navbar />
+      <PageLayout>
 
       <div className="flex flex-col items-center p-4 md:p-8">
         <Typography variant="h4" gutterBottom className="text-2xl md:text-[2rem] font-semibold text-[#333] mb-6 text-center">
@@ -105,7 +104,7 @@ const HandSign = () => {
         </Button>
       </div>
 
-      <Footer />
+      </PageLayout>
     </div>
   );
 };

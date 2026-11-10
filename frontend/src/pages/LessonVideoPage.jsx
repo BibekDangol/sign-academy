@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
-import axios from 'axios';
+import { publicApi } from '../utils/api';
 import Navbar from './Navbar';
 
 const LessonVideoPage = () => {
@@ -9,7 +9,7 @@ const LessonVideoPage = () => {
   const [lesson, setLesson] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:8000/api/lessons/${lessonId}/`)
+    publicApi.get(`lessons/${lessonId}/`)
       .then(response => setLesson(response.data))
       .catch(err => console.error("Failed to load lesson", err));
   }, [lessonId]);

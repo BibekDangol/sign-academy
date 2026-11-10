@@ -193,7 +193,6 @@ class UserLessonProgress(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-        AttendanceRecord.objects.create(user=instance)
 
 @receiver(post_save, sender=Lecturer)
 def grant_staff_status(sender, instance, created, **kwargs):

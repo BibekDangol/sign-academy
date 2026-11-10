@@ -3,6 +3,8 @@ import React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
+import GuestRoute from './utils/GuestRoute';
+import Forbidden from './pages/Forbidden';
 
 // Public Pages
 import Home from './pages/Home';
@@ -46,27 +48,29 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/about1" element={<About1 />} />
           <Route path="/contacts" element={<Contacts />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+          <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
           <Route path="/dictionary" element={<DictionaryPage />} />
-          <Route path="/courses" element={<CoursesPage />} />
-          <Route path="/course/:courseId/lesson/:lessonId" element={<CourseDetailPage />} />
-          <Route path="/progress" element={<ProgressPage />} />
+          <Route path="/courses" element={<ProtectedRoute><CoursesPage /></ProtectedRoute>} />
+          <Route path="/course/:courseId/lesson/:lessonId" element={<ProtectedRoute><CourseDetailPage /></ProtectedRoute>} />
+          <Route path="/progress" element={<ProtectedRoute><ProgressPage /></ProtectedRoute>} />
           <Route path="/handsign" element={<HandSign />} />
           <Route path="/handsignstore" element={<HandSignStore />} />
-          <Route path="/form" element={<Form />} />
+          <Route path="/form" element={<ProtectedRoute roles={['admin']}><Form /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
           {/* Protected Routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-          <Route path="/all" element={<ProtectedRoute><All /></ProtectedRoute>} />
+          <Route path="/all" element={<ProtectedRoute roles={['admin']}><All /></ProtectedRoute>} />
           <Route path="/attendance" element={<ProtectedRoute><AttendanceRecords /></ProtectedRoute>} />
           <Route path="/leave" element={<ProtectedRoute><LeaveApplication /></ProtectedRoute>} />
-          <Route path="/payment" element={<Payment />} />
+          <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
           <Route path="/course/:courseId/info" element={<CourseMoreInfoPage />} />
           <Route path="/lesson/:lessonId" element={<LessonVideoPage />} />
 
+
+          <Route path="/forbidden" element={<ProtectedRoute><Forbidden /></ProtectedRoute>} />
 
           {/* 404 Route */}
           <Route path="*" element={<NotFound />} />

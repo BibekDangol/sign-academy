@@ -1,9 +1,8 @@
+import PageLayout from '../components/layout/PageLayout';
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { publicApi } from '../utils/api';
 import AuthContext from '../context/AuthContext';
-import Navbar from './Navbar';
-import Footer from './Footer';
 import bgi from './img/cover.jpg';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -37,7 +36,7 @@ const Home = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://127.0.0.1:8000/api/contact/', contactData);
+      await publicApi.post('contact/', contactData);
       setStatusMsg('✅ Message sent successfully!');
       setContactData({ name: '', email: '', message: '' });
     } catch (error) {
@@ -49,7 +48,7 @@ const Home = () => {
   return (
     // <div className="[font-family:'Segoe_UI',sans-serif] text-[#222] bg-[#eeebeb]">
     <div>
-      <Navbar />
+      <PageLayout>
 
       {/* Hero Section */}
       <section className="bg-cover bg-center h-[90vh] flex items-center justify-center relative text-center text-white" style={{ backgroundImage: `url(${bgi})` }}>
@@ -182,7 +181,7 @@ const Home = () => {
         </form>
       </section>
 
-      <Footer />
+      </PageLayout>
     </div>
   );
 };

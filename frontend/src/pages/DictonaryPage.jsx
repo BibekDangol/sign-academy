@@ -1,6 +1,6 @@
+import PageLayout from '../components/layout/PageLayout';
+import { publicApi } from '../utils/api';
 import { useState, useEffect } from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer"; // ✅ Import Footer here
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -18,8 +18,7 @@ export default function DictionaryPage() {
   const [imageToShow, setImageToShow] = useState(null);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/dictionary/")
-      .then((response) => response.json())
+    publicApi.get('dictionary/').then(response => response.data)
       .then((data) => setDictionary(data))
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
@@ -32,7 +31,7 @@ export default function DictionaryPage() {
 
   return (
     <div className="w-full m-0 p-0">
-      <Navbar />
+      <PageLayout>
 
       <main id="container" className="max-w-[1200px] mx-auto py-8 px-4 font-[Segoe_UI,Tahoma,Geneva,Verdana,sans-serif] box-border overflow-x-hidden max-md:p-4">
         <div id="search" className="text-center mb-4 mt-8">
@@ -89,7 +88,7 @@ export default function DictionaryPage() {
         )}
       </main>
 
-      <Footer /> {/* ✅ Footer added here */}
+      </PageLayout> {/* ✅ Footer added here */}
     </div>
   );
 }

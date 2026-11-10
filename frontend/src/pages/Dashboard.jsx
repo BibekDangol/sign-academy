@@ -1,28 +1,20 @@
+import PageLayout from '../components/layout/PageLayout';
 import React, { useContext } from 'react';
 import { Typography, Card, CardContent, Button, Box } from '@mui/material';
 import { FaUser, FaEnvelope, FaIdBadge, FaClock, FaCog, FaChartLine } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
 import AuthContext from '../context/AuthContext';
-import Navbar from './Navbar';
-import Footer from './Footer';
 import bgi from './img/image4.png';
 
 const Dashboard = () => {
-  const { logoutUser } = useContext(AuthContext);
-  const token = localStorage.getItem("authTokens");
-
-  const decode = jwtDecode(token);
-  const user_id = decode.user_id;
-  const username = decode.username;
-  const email = decode.email;
-  const full_name = decode.full_name;
-  const tokenExpiry = new Date(decode.exp * 1000);
+  const { user } = useContext(AuthContext);
+  const { user_id, username, email, full_name, exp } = user || {};
+  const tokenExpiry = new Date(exp * 1000);
   const tokenValidityDuration = Math.floor((tokenExpiry - Date.now()) / (1000 * 60));
 
   return (
     <div className="bg-cover bg-center min-h-screen flex flex-col" style={{ backgroundImage: `url(${bgi})` }}>
-      <Navbar />
+      <PageLayout>
       <div className="pt-[100px] px-5 pb-10 max-w-[1000px] mx-auto flex-1">
         <Typography variant="h3" className="text-[2rem] md:text-[2.5rem] font-bold text-center text-white mb-10 [text-shadow:2px_2px_6px_rgba(0,0,0,0.3)]">
           Welcome, {username}
@@ -64,7 +56,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <Footer />
+      </PageLayout>
     </div>
   );
 };

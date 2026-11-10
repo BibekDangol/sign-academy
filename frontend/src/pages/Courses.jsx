@@ -1,54 +1,25 @@
-import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import PageLayout from '../components/layout/PageLayout';
+import useLearningData from '../hooks/useLearningData';
+import React, { useEffect, useState } from "react";
+import useAxios from '../utils/useAxios';
 import { useNavigate } from "react-router-dom";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
-import AuthContext from "../context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 const CoursesPage = () => {
-  const [courses, setCourses] = useState([]);
-  const [lessons, setLessons] = useState([]);
+  const { courses, lessons, lessonProgress } = useLearningData();
   const [selectedCourseId, setSelectedCourseId] = useState(null);
   const [completedLessons, setCompletedLessons] = useState({});
-  const { authTokens } = useContext(AuthContext);
+  const api = useAxios();
   const navigate = useNavigate(); // ✅ Added
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${authTokens?.access}`,
-    },
-  };
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [courseRes, lessonRes, progressRes] = await Promise.all([
-          axios.get("http://localhost:8000/api/courses/", config),
-          axios.get("http://localhost:8000/api/lessons/", config),
-          axios.get("http://localhost:8000/api/lesson-progress/", config),
-        ]);
-
-        setCourses(courseRes.data);
-        setLessons(lessonRes.data);
-
-        const progressMap = {};
-        progressRes.data.forEach((record) => {
-          if (record.completed) {
-            progressMap[record.lesson] = { completed: true, id: record.id };
-          }
-        });
-        setCompletedLessons(progressMap);
-      } catch (error) {
-        console.error("Error loading data:", error);
-      }
-    };
-
-    if (authTokens) {
-      fetchData();
-    }
-  }, [authTokens]);
+    const progressMap = {};
+    lessonProgress.forEach(record => {
+      if (record.completed) progressMap[record.lesson] = { completed: true, id: record.id };
+    });
+    setCompletedLessons(progressMap);
+  }, [lessonProgress]);
 
   const toggleCompletion = async (lessonId) => {
     const isCompleted = completedLessons[lessonId]?.completed;
@@ -56,20 +27,18 @@ const CoursesPage = () => {
 
     try {
       const res = progressId
-        ? await axios.patch(
-          `http://localhost:8000/api/lesson-progress/${progressId}/`,
+        ? await api.patch(
+          `lesson-progress/${progressId}/`,
           {
             completed: !isCompleted,
           },
-          config,
         )
-        : await axios.post(
-          "http://localhost:8000/api/lesson-progress/",
+        : await api.post(
+          "lesson-progress/",
           {
             lesson: lessonId,
             completed: true,
           },
-          config,
         );
 
       setCompletedLessons((prev) => ({
@@ -86,10 +55,9 @@ const CoursesPage = () => {
 
   const handleAttendance = async (courseId) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/course-attendance/",
+      const response = await api.post(
+        "course-attendance/",
         { course: courseId },
-        config,
       );
       alert(response.data.message);
     } catch (error) {
@@ -109,7 +77,7 @@ const CoursesPage = () => {
 
   return (
     <div className="text-red-600">
-      <Navbar />
+      <PageLayout>
       <main className="py-5 bg-[#f4f4f4] min-h-[calc(100vh-200px)]">
         {selectedCourseId === null ? (
           courses.map((course) => {
@@ -230,7 +198,7 @@ const CoursesPage = () => {
           </div>
         )}
       </main>
-      <Footer />
+      </PageLayout>
     </div>
   );
 };

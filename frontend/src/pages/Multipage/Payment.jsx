@@ -1,3 +1,4 @@
+import { publicApi } from '../../utils/api';
 import React, { useState, useEffect } from 'react';
 import {
   Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Paper,
@@ -37,8 +38,7 @@ export default function PaymentForm() {
   const paymentAmount = 1000;
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/courses/')
-      .then(res => res.json())
+    publicApi.get('courses/').then(response => response.data)
       .then(data => setCourses(data))
       .catch(err => console.error('Error fetching courses:', err));
   }, []);

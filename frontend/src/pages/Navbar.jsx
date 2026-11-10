@@ -46,11 +46,12 @@ const Navbar = () => {
       { to: "/handsign", label: "HandSign" },
       { to: "/dictionary", label: "Dictionary" },
       { to: "/about1", label: "About" },
+      ...(user.role === 'admin' ? [{ to: "/form", label: "Leave Approvals" }, { to: "/all", label: "All Attendance" }] : []),
     ]
     : [
       { to: "/", label: "Home" },
       { to: "/about", label: "About" },
-      { to: "/login", label: "Courses" },
+      { to: "/courses", label: "Courses" },
     ];
 
   return (

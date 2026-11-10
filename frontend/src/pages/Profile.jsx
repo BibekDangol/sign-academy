@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'; // Import jwtDecode
+import useAxios from '../utils/useAxios';
+import AuthContext from '../context/AuthContext';
 import { Container, Grid, IconButton, Tooltip } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { green } from '@mui/material/colors';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -34,6 +33,7 @@ class ErrorBoundary extends React.Component {
 }
 
 class App extends Component {
+  static contextType = AuthContext;
   state = {
     image: null,
     imagePreviewUrl: null,
@@ -55,11 +55,10 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const token = localStorage.getItem("authTokens");
-    const decode = jwtDecode(token);
-    const user_id = decode.user_id;
+    const user_id = this.context.user?.user_id;
+    if (!user_id) return;
 
-    axios.get(`http://localhost:8000/api/api/posts/?user_id=${user_id}`)
+    this.props.api.get(`api/posts/?user_id=${user_id}`)
       .then(res => {
         this.setState({
           imageData: res.data,
@@ -96,9 +95,8 @@ class App extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem("authTokens");
-    const decode = jwtDecode(token);
-    const user_id = decode.user_id;
+    const user_id = this.context.user?.user_id;
+    if (!user_id) return;
 
     const title = this.getRandomTitle();
     const content = `This is the content for ${title}`;
@@ -106,13 +104,9 @@ class App extends Component {
     form_data.append('image', this.state.image, this.state.image.name);
     form_data.append('title', title);
     form_data.append('content', content);
-    form_data.append('user_id', user_id); // Add user ID obtained from JWT token
-    let url = 'http://localhost:8000/api/api/posts/';
-    axios.post(url, form_data, {
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
-    })
+    form_data.append('user', user_id); // Add user ID obtained from JWT token
+    let url = 'api/posts/';
+    this.props.api.post(url, form_data)
       .then(res => {
         console.log(res.data);
         this.setState(prevState => ({
@@ -182,4 +176,7 @@ class App extends Component {
   }
 }
 
-export default App;
+export default function Profile() {
+  const api = useAxios();
+  return <App api={api} />;
+}

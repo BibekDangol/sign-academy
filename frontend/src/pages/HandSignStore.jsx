@@ -1,9 +1,8 @@
+import PageLayout from '../components/layout/PageLayout';
 import React, { useRef, useState, useEffect } from 'react';
 import * as handpose from '@tensorflow-models/handpose';
 import * as fp from 'fingerpose';
 import Handsigns from './gesturestore';  
-import Navbar from './Navbar';           
-import Footer from './Footer';
 import { Button } from "@/components/ui/button";           
 
 const HandSignStore = () => {
@@ -131,7 +130,7 @@ const HandSignStore = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
+      <PageLayout>
 
       {/* Video and Chart Side-by-side */}
       <div className="flex flex-col md:flex-row justify-center items-stretch md:items-start gap-[30px] mt-5 px-4 md:px-0">
@@ -164,7 +163,7 @@ const HandSignStore = () => {
         </div>
       </div>
 
-      <Footer />
+      </PageLayout>
     </div>
   );
 };

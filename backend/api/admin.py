@@ -8,6 +8,14 @@ from .models import Course, CourseAttendance, Lesson, Lecturer, Comment, UserLes
 
 User = get_user_model()
 
+# Lecturers can have is_staff from older setup, but must not bypass API ownership
+# restrictions through the unrestricted model administration interface.
+def administrator_site_access(request):
+    return request.user.is_active and request.user.is_superuser
+
+
+admin.site.has_permission = administrator_site_access
+
 # Unregister default Django models (safe check)
 if admin.site.is_registered(User):
     admin.site.unregister(User)

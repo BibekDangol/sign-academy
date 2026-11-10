@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
+import PageLayout from '../components/layout/PageLayout';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import useAxios from '../utils/useAxios';
 import AuthContext from '../context/AuthContext';
-import Navbar from '../pages/Navbar';
-import Footer from '../pages/Footer';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -16,47 +15,41 @@ const CourseDetailPage = () => {
   const [reviewText, setReviewText] = useState('');
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { authTokens } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
+  const api = useAxios();
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${authTokens?.access}`,
-    },
-  };
-
-  const fetchCourseAndLesson = async () => {
+  const fetchCourseAndLesson = useCallback(async () => {
     try {
       const [courseRes, lessonRes] = await Promise.all([
-        axios.get(`http://localhost:8000/api/courses/${courseId}/`, config),
-        axios.get(`http://localhost:8000/api/lessons/${lessonId}/`, config),
+        api.get(`courses/${courseId}/`),
+        api.get(`lessons/${lessonId}/`),
       ]);
       setCourse(courseRes.data);
       setLesson(lessonRes.data);
     } catch (error) {
       console.error('Error loading course or lesson:', error);
     }
-  };
+  }, [api, courseId, lessonId]);
 
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/comments/?lesson=${lessonId}`, config);
+      const res = await api.get(`comments/?lesson=${lessonId}`);
       setReviews(res.data);
     } catch (error) {
       console.error('Error fetching reviews:', error);
     }
-  };
+  }, [api, lessonId]);
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        'http://localhost:8000/api/comments/',
+      await api.post(
+        'comments/',
         {
           course: parseInt(courseId),
           lesson: parseInt(lessonId),
           text: reviewText,
-        },
-        config
+        }
       );
       setReviewText('');
       fetchReviews();
@@ -67,13 +60,13 @@ const CourseDetailPage = () => {
   };
 
   useEffect(() => {
-    if (authTokens) {
+    if (user) {
       setLoading(true);
       fetchCourseAndLesson()
         .then(fetchReviews)
         .finally(() => setLoading(false));
     }
-  }, [authTokens, courseId, lessonId]);
+  }, [user, fetchCourseAndLesson, fetchReviews]);
 
   const getFullVideoUrl = () => lesson?.video_url || '';
 
@@ -115,7 +108,7 @@ const CourseDetailPage = () => {
 
   return (
     <div>
-      <Navbar />
+      <PageLayout>
       <div className="max-w-[1000px] mx-auto p-5">
         {loading ? (
           <p>Loading course and lesson details...</p>
@@ -181,7 +174,7 @@ const CourseDetailPage = () => {
           <p>Unable to load course and lesson details.</p>
         )}
       </div>
-      <Footer />
+      </PageLayout>
     </div>
   );
 };

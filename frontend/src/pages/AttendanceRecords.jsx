@@ -1,65 +1,50 @@
+import PageLayout from '../components/layout/PageLayout';
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import useAxios from '../utils/useAxios';
 import AuthContext from "../context/AuthContext";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
 
 import {
   Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper, Typography,
-  CircularProgress, TablePagination, Alert, Box, Divider,
-  Accordion, AccordionSummary, AccordionDetails
+  CircularProgress, TablePagination, Alert, Box, Divider
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const AttendanceRecords = () => {
-  const { authTokens } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
+  const api = useAxios();
   const [loginRecords, setLoginRecords] = useState([]);
   const [courseAttendance, setCourseAttendance] = useState([]);
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
-    if (authTokens) {
-      const decoded = jwtDecode(authTokens.access);
-      setUser(decoded);
-      fetchLoginAttendance(decoded.user_id);
-      fetchCourseAttendance();
-    }
-  }, [authTokens]);
+    if (!user) return;
+    const fetchLoginAttendance = async (userId) => {
+      try {
+        const response = await api.get(`attendance/user/${userId}/`);
+        setLoginRecords(response.data || []);
+      } catch (err) {
+        console.error("Error fetching login attendance:", err);
+        setError("Failed to fetch login attendance records.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const fetchLoginAttendance = async (userId) => {
-    try {
-      const response = await axios.get(`http://localhost:8000/api/attendance/user/${userId}/`, {
-        headers: {
-          Authorization: `Bearer ${authTokens.access}`,
-        },
-      });
-      setLoginRecords(response.data || []);
-    } catch (err) {
-      console.error("Error fetching login attendance:", err);
-      setError("Failed to fetch login attendance records.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchCourseAttendance = async () => {
+      try {
+        const response = await api.get(`course-attendance/`);
+        setCourseAttendance(response.data || []);
+      } catch (err) {
+        console.error("Error fetching course attendance:", err);
+      }
+    };
 
-  const fetchCourseAttendance = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8000/api/course-attendance/`, {
-        headers: {
-          Authorization: `Bearer ${authTokens.access}`,
-        },
-      });
-      setCourseAttendance(response.data || []);
-    } catch (err) {
-      console.error("Error fetching course attendance:", err);
-    }
-  };
+    fetchLoginAttendance(user.user_id);
+    fetchCourseAttendance();
+  }, [api, user]);
 
   const formatDuration = (login, logout) => {
     if (!logout) return "Active";
@@ -70,8 +55,7 @@ const AttendanceRecords = () => {
   };
 
   return (
-    <>
-      <Navbar />
+    <PageLayout>
       <Box sx={{ p: 3, maxWidth: "95%", margin: "auto" }}>
         <Typography variant="h4" gutterBottom align="center">
           Your Attendance Records
@@ -173,8 +157,7 @@ const AttendanceRecords = () => {
           </>
         )}
       </Box>
-      <Footer />
-    </>
+      </PageLayout>
   );
 };
 

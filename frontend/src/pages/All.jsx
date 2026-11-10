@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import useAxios from '../utils/useAxios';
 
 import AuthContext from '../context/AuthContext'; // Default import
 
@@ -8,7 +8,8 @@ import AuthContext from '../context/AuthContext'; // Default import
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Select, MenuItem } from '@mui/material';
 
 const AttendanceRecords = () => {
-  const { authTokens } = useContext(AuthContext); // Access authTokens from the context
+  const { user } = useContext(AuthContext);
+  const api = useAxios();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedEmail, setSelectedEmail] = useState(''); // State for selected email filter
@@ -17,37 +18,35 @@ const AttendanceRecords = () => {
   const [recordsPerPage] = useState(5); // Number of records per page
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (!user) return;
+    const fetchData = async () => {
+      try {
+        const response = await api.get('attendance/');
+        // Remove duplicates
+        const uniqueRecords = removeDuplicates(response.data);
+        setRecords(uniqueRecords);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/attendance-records/', {
-        headers: {
-          Authorization: `Bearer ${authTokens.access}`
-        }
+    // Function to remove duplicates
+    const removeDuplicates = (data) => {
+      const threshold = 60 * 1000; // 1 minute in milliseconds
+      const uniqueRecords = data.filter((record, index, self) => {
+        const currentIndexTime = new Date(record.login_time).getTime();
+        const duplicateIndex = self.findIndex((r) =>
+          Math.abs(new Date(r.login_time).getTime() - currentIndexTime) <= threshold
+        );
+        return duplicateIndex === index;
       });
-      // Remove duplicates
-      const uniqueRecords = removeDuplicates(response.data);
-      setRecords(uniqueRecords);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+      return uniqueRecords;
+    };
 
-  // Function to remove duplicates
-  const removeDuplicates = (data) => {
-    const threshold = 60 * 1000; // 1 minute in milliseconds
-    const uniqueRecords = data.filter((record, index, self) => {
-      const currentIndexTime = new Date(record.login_time).getTime();
-      const duplicateIndex = self.findIndex((r) =>
-        Math.abs(new Date(r.login_time).getTime() - currentIndexTime) <= threshold
-      );
-      return duplicateIndex === index;
-    });
-    return uniqueRecords;
-  };
+    fetchData();
+  }, [api, user]);
 
   const handleEmailChange = (e) => {
     setSelectedEmail(e.target.value);

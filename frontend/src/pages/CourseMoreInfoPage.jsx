@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import PageLayout from '../components/layout/PageLayout';
+import React, { useState, useEffect, useContext } from 'react';
 import { Typography, Box, TextField, Button, Card, CardContent } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
-import axios from 'axios';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import { publicApi } from '../utils/api';
+import useAxios from '../utils/useAxios';
+import AuthContext from '../context/AuthContext';
 import bgi from './img/image4.png';
 
 const CourseMoreInfoPage = () => {
   const { courseId } = useParams();
+  const { user } = useContext(AuthContext);
+  const api = useAxios();
   const [course, setCourse] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
@@ -16,7 +19,7 @@ const CourseMoreInfoPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:8000/api/courses/${courseId}/`)
+    publicApi.get(`courses/${courseId}/`)
       .then(response => {
         setCourse(response.data);
         setLoading(false);
@@ -27,32 +30,26 @@ const CourseMoreInfoPage = () => {
         setLoading(false);
       });
   
-    axios.get(`http://127.0.0.1:8000/api/comments/?course_id=${courseId}`)
+    if (user) api.get(`comments/?course_id=${courseId}`)
       .then(response => {
         setComments(response.data);
       })
       .catch(error => {
         console.error('Error fetching comments:', error);
       });
-  }, [courseId]);
+  }, [api, user, courseId]);
   
   const handleAddComment = () => {
     if (!newComment.trim()) return;
   
-    const accessToken = JSON.parse(localStorage.getItem('authTokens'))?.access;
-    if (!accessToken) {
+    if (!user) {
       alert("Please log in to post a comment.");
       return;
     }
   
-    axios.post(`http://127.0.0.1:8000/api/comments/`, {
+    api.post(`comments/`, {
       course: courseId,
       text: newComment
-    }, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      }
     })
     .then(response => {
       setComments([response.data, ...comments]);
@@ -73,7 +70,7 @@ const CourseMoreInfoPage = () => {
 
   return (
     <div className="bg-cover bg-center bg-no-repeat min-h-screen flex flex-col" style={{ backgroundImage: `url(${bgi})` }}>
-      <Navbar />
+      <PageLayout>
 
       <div className="pt-[100px] px-5 pb-10 max-w-[1000px] mx-auto flex-1">
         <Typography variant="h3" className="text-center text-white text-2xl md:text-[2.5rem] font-bold mb-10 [text-shadow:2px_2px_6px_rgba(0,0,0,0.4)]">
@@ -131,7 +128,7 @@ const CourseMoreInfoPage = () => {
         </div>
       </div>
 
-      <Footer />
+      </PageLayout>
     </div>
   );
 };

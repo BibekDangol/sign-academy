@@ -1,13 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import swal from 'sweetalert2';
-import AuthContext from '../context/AuthContext'; // Importing AuthContext
+import useAxios from '../utils/useAxios';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 
 const LeaveApplication = () => {
-  const { authTokens } = useContext(AuthContext); // Accessing authTokens from AuthContext
+  const api = useAxios();
   const [formData, setFormData] = useState({
     user: '',
     start_date: '',
@@ -25,15 +25,7 @@ const LeaveApplication = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/apply-leave/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authTokens.access}` 
-        },
-        body: JSON.stringify(formData)
-      });
-      if (response.ok) {
+      await api.post('apply-leave/', formData);
         swal.fire({
           title: 'Leave Applied Successfully',
           icon: 'success',
@@ -41,23 +33,11 @@ const LeaveApplication = () => {
           timerProgressBar: true,
           showConfirmButton: false
         });
-      } else {
-        const data = await response.json();
-        console.error('Error:', data);
-        swal.fire({
-          title: 'Failed to Apply Leave',
-          text: data.detail,
-          icon: 'error',
-          timer: 3000,
-          timerProgressBar: true,
-          showConfirmButton: false
-        });
-      }
     } catch (error) {
       console.error('Error:', error);
       swal.fire({
         title: 'Failed to Apply Leave',
-        text: 'An error occurred',
+        text: error.response?.data?.detail || 'Please check the form and try again.',
         icon: 'error',
         timer: 3000,
         timerProgressBar: true,
@@ -71,10 +51,6 @@ const LeaveApplication = () => {
       <div className="mx-auto w-full max-w-[1000px] px-4">
         <h2 style={{textAlign:'center'}}>Apply for Leave</h2><br /><br />
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label>User Id:</Label>
-            <Input type="text" name="user" value={formData.user} onChange={handleInputChange} required className="w-full" />
-          </div>
           <div className="space-y-2">
             <Label>Start Date:</Label>
             <Input type="date" name="start_date" value={formData.start_date} onChange={handleInputChange} required className="w-full" />

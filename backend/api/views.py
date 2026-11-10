@@ -1,14 +1,11 @@
 # views.py
 
-from datetime import timezone
-from tokenize import Token
-from django.contrib.auth import authenticate
-from django.db import connection
+from django.db import connection, transaction
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.timezone import now
 
-from rest_framework import generics, status, permissions, viewsets, filters
+from rest_framework import generics, status, permissions, viewsets, filters, serializers
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -16,20 +13,23 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken, UntypedToken, AccessToken
+from rest_framework_simplejwt.exceptions import TokenError
 
 from django_filters.rest_framework import DjangoFilterBackend
+from .permissions import IsAdministrator, AdminWritePublicRead, CourseWritePublicRead, OwnerOrAdministrator, is_admin
 
 # Models
 from .models import (
     User, AttendanceRecord, Leave, Post, Profile, UserLessonProgress,
-    CourseAttendance, Dictionary, Course, Lesson, Comment, 
+    CourseAttendance, Dictionary, Course, Lesson, Comment, Lecturer,
 )
 
 # Serializers
 from .serializers import (
     MyTOPS, RegistrationSerializer, ChangePasswordSerializer, UserLessonProgressSerializer,
     UserSerializer, AttendanceRecordSerializer, LeaveSerializer, PostSerializer, CommentSerializer, DictionarySerializer, CourseSerializer,
-    LessonSerializer, CourseAttendanceSerializer
+    LessonSerializer, CourseAttendanceSerializer, LeaveStatusSerializer, LecturerSerializer, EditProfileSerializer
 )
 
 
@@ -41,26 +41,6 @@ def index(request):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTOPS
 
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-
-        # Get user from validated data (custom serializer assigns self.user)
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.user
-
-        # Log attendance record
-        last_attendance = AttendanceRecord.objects.filter(user=user).order_by('-login_time').first()
-
-        AttendanceRecord.objects.create(
-            user=user,
-            previous_login_time=last_attendance.login_time if last_attendance else None,
-            login_time=now(),
-            ip_address=request.META.get('REMOTE_ADDR', ''),
-            device_info=request.META.get('HTTP_USER_AGENT', '')
-        )
-
-        return response
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny)
@@ -85,6 +65,7 @@ def dashboard(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def view_all_routes(request):
     data = [
         'api/token/refresh/',
@@ -106,30 +87,22 @@ def view_all_routes(request):
     return Response(data)
 class PostView(APIView):
     parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        user_id = request.query_params.get('user_id')
-        if user_id is None:
-            return Response({'error': 'user_id parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
-        
+    def get(self, request):
+        user_id = request.query_params.get('user_id', request.user.pk)
+        if not str(user_id).isdigit():
+            raise serializers.ValidationError({'user_id': 'Enter a valid user ID.'})
+        if not is_admin(request.user) and int(user_id) != request.user.pk:
+            raise PermissionDenied('You can view only your own profile uploads.')
         posts = Post.objects.filter(user_id=user_id)
-        serializer = PostSerializer(posts, many=True)
-        # Iterate through each post and update the image field to contain the URL of the image
-        for post in serializer.data:
-            post['image'] = request.build_absolute_uri(post['image'])
-        return Response(serializer.data)
+        return Response(PostSerializer(posts, many=True, context={'request': request}).data)
 
-
-    def post(self, request, *args, **kwargs):
-        posts_serializer = PostSerializer(data=request.data)
-        if posts_serializer.is_valid():
-            posts_serializer.save()
-            # After saving, update the image field to contain the URL of the image
-            posts_serializer.data['image'] = request.build_absolute_uri(posts_serializer.data['image'])
-            return Response(posts_serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            print('error', posts_serializer.errors)
-            return Response(posts_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        serializer = PostSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class ChangePasswordView(generics.UpdateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -138,30 +111,29 @@ class ChangePasswordView(generics.UpdateAPIView):
     def get_object(self):
         return self.request.user
 
+    @transaction.atomic
     def update(self, request, *args, **kwargs):
-        user = self.get_object()
+        from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
+        user = User.objects.select_for_update().get(pk=request.user.pk)
+        request.user = user
         serializer = self.get_serializer(data=request.data)
-
-        if serializer.is_valid():
-            old_password = serializer.validated_data.get('old_password')
-            new_password = serializer.validated_data.get('new_password')
-
-            if not user.check_password(old_password):
-                return Response({'detail': 'Invalid old password.'}, status=status.HTTP_400_BAD_REQUEST)
-
-            user.set_password(new_password)
-            user.save()
-            return Response({'detail': 'Password changed successfully.'}, status=status.HTTP_200_OK)
-        else:
-            # ✅ Add this line to see errors in console
-            print("Serializer errors:", serializer.errors)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        if not user.check_password(serializer.validated_data['old_password']):
+            return Response({'old_password': ['Invalid old password.']}, status=status.HTTP_400_BAD_REQUEST)
+        user.set_password(serializer.validated_data['new_password'])
+        user.save(update_fields=['password'])
+        for token in OutstandingToken.objects.filter(user=user):
+            BlacklistedToken.objects.get_or_create(token=token)
+        closed_at = now()
+        for record in AttendanceRecord.objects.select_for_update().filter(user=user, logout_time__isnull=True):
+            record.logout_time = closed_at
+            record.save(update_fields=['logout_time', 'session_duration'])
+        return Response({'detail': 'Password changed. Please log in again on all devices.'})
 
 
 class EditProfileView(generics.UpdateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = UserSerializer
+    serializer_class = EditProfileSerializer
 
     def get_object(self):
         return self.request.user
@@ -171,11 +143,19 @@ class EditProfileView(generics.UpdateAPIView):
         serializer = self.get_serializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            data = dict(serializer.data)
+            # Re-sign current access claims without extending its lifetime or changing its session.
+            if request.auth is not None:
+                access = AccessToken(str(request.auth), verify=False)
+                for field in ['username', 'email', 'full_name', 'bio', 'role']:
+                    access[field] = data[field]
+                data['access'] = str(access)
+            return Response(data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserListView(generics.ListAPIView):
+    permission_classes = [IsAdministrator]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -195,7 +175,7 @@ class AttendanceRecordListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         queryset = AttendanceRecord.objects.select_related('user').all()
-        if not user.is_staff:
+        if not is_admin(user):
             queryset = queryset.filter(user=user)
         return queryset
 
@@ -207,23 +187,65 @@ class UserAttendanceView(generics.ListAPIView):
 
     def get_queryset(self):
         user_id = int(self.kwargs['user_id'])  # 🔄 Ensure it's an int
-        if self.request.user.is_staff or self.request.user.id == user_id:
+        if is_admin(self.request.user) or self.request.user.id == user_id:
             return AttendanceRecord.objects.filter(user_id=user_id)\
                                            .select_related('user')\
                                            .order_by('-login_time')
         raise PermissionDenied("You don't have permission to view these records")
 
-class LogoutView(generics.UpdateAPIView):
-    queryset = AttendanceRecord.objects.all()
-    serializer_class = AttendanceRecordSerializer
-    permission_classes = [permissions.IsAuthenticated]
+class LogoutRequestSerializer(serializers.Serializer):
+    refresh = serializers.CharField(trim_whitespace=False, write_only=True)
 
-    def perform_update(self, serializer):
-        serializer.save(
-            logout_time=timezone.now(),
-            device_info=self.request.META.get('HTTP_USER_AGENT', ''),
-            ip_address=self.request.META.get('REMOTE_ADDR')
-        )
+
+def revoke_session(request, expected_attendance=None, expected_user=None):
+    payload = LogoutRequestSerializer(data=request.data)
+    payload.is_valid(raise_exception=True)
+    raw = payload.validated_data['refresh']
+    try:
+        # Verify signature and expiry even when already blacklisted, making retries safe.
+        claims = UntypedToken(raw)
+        if claims.get('token_type') != 'refresh':
+            raise TokenError('Expected a refresh token')
+    except TokenError:
+        raise serializers.ValidationError({'refresh': 'Invalid or expired refresh token.'})
+    user_id = claims.get('user_id')
+    attendance_id = claims.get('attendance_id')
+    if expected_user is not None and str(user_id) != str(expected_user):
+        raise PermissionDenied('This session belongs to another user.')
+    if expected_attendance is not None and attendance_id != expected_attendance:
+        raise PermissionDenied('This token does not belong to that attendance session.')
+    with transaction.atomic():
+        record = None
+        if attendance_id is not None:
+            record = AttendanceRecord.objects.select_for_update().filter(pk=attendance_id, user_id=user_id).first()
+            if record is None:
+                raise PermissionDenied('Invalid attendance session.')
+        # UntypedToken has already verified this token. Skip blacklist checks for repeat logout.
+        RefreshToken(raw, verify=False).blacklist()
+        if record is not None and record.logout_time is None:
+            record.logout_time = now()
+            record.save(update_fields=['logout_time', 'session_duration'])
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class SessionLogoutView(APIView):
+    # Possession of a signed, unexpired refresh token authorizes revoking that session.
+    # Do not require a live access token or trigger refresh just to log out.
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        return revoke_session(request)
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk):
+        return revoke_session(request, expected_attendance=pk, expected_user=request.user.pk)
+
+    put = patch
+
 
 class UserLessonProgressViewSet(viewsets.ModelViewSet):
     serializer_class = UserLessonProgressSerializer
@@ -231,8 +253,6 @@ class UserLessonProgressViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_staff:
-            return UserLessonProgress.objects.select_related('lesson', 'user')
         return UserLessonProgress.objects.filter(user=user).select_related('lesson')
 
     def perform_create(self, serializer):
@@ -247,23 +267,20 @@ class UserLessonProgressViewSet(viewsets.ModelViewSet):
         If a record already exists for the user and lesson, return it.
         """
         user = request.user
-        lesson_id = request.data.get("lesson")
+        incoming = self.get_serializer(data=request.data)
+        incoming.is_valid(raise_exception=True)
+        lesson_id = incoming.validated_data['lesson'].pk
 
         # Look for existing progress
         existing = UserLessonProgress.objects.filter(user=user, lesson_id=lesson_id).first()
         if existing:
-            serializer = self.get_serializer(existing)
+            serializer = self.get_serializer(existing, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         # No existing record – create one
         return super().create(request, *args, **kwargs)
-
-class IsAdminOrReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return request.user.is_staff
-
 
 class LeaveApplicationView(generics.CreateAPIView):
     serializer_class = LeaveSerializer
@@ -278,7 +295,7 @@ class LeaveListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        if is_admin(self.request.user):
             return Leave.objects.all()
         else:
             return Leave.objects.filter(user=self.request.user)
@@ -286,29 +303,18 @@ class LeaveListView(generics.ListAPIView):
 
 class LeaveActionView(generics.UpdateAPIView):
     queryset = Leave.objects.all()
-    serializer_class = LeaveSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
-
-    def put(self, request, *args, **kwargs):
-        leave = self.get_object()
-        status = request.data.get('status')
-        if status not in ['APPROVED', 'REJECTED']:
-            return Response({'detail': 'Invalid status provided'}, status=status.HTTP_400_BAD_REQUEST)
-        leave.status = status
-        leave.save()
-        return Response({'detail': f'Leave status updated to {status}'})
-
-
+    serializer_class = LeaveStatusSerializer
+    permission_classes = [IsAdministrator]
 
 class DictionaryView(generics.ListCreateAPIView):
     queryset = Dictionary.objects.all()
     serializer_class = DictionarySerializer
-    permission_classes = [permissions.AllowAny]  # Anyone can view dictionary, but admin can add new signs
+    permission_classes = [AdminWritePublicRead]
 
 class DictionaryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Dictionary.objects.all()
     serializer_class = DictionarySerializer
-    permission_classes = [permissions.IsAdminUser]  # Only admin can edit/delete signs
+    permission_classes = [AdminWritePublicRead]
 
 
 
@@ -316,25 +322,31 @@ class DictionaryDetailView(generics.RetrieveUpdateDestroyAPIView):
 class CourseView(generics.ListCreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    permission_classes = [permissions.AllowAny]  # Change to IsAuthenticated for protected access
+    permission_classes = [CourseWritePublicRead]
 
-# Course Detail View (Retrieve, Update, Delete)
+    def perform_create(self, serializer):
+        if is_admin(self.request.user):
+            serializer.save()
+        else:
+            serializer.save(lecturer=self.request.user.lecturer)
+
+
 class CourseDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [CourseWritePublicRead]
 
 # Lesson View (List & Create)
 class LessonView(generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [CourseWritePublicRead]
 
 # Lesson Detail View (Retrieve, Update, Delete)
 class LessonDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [CourseWritePublicRead]
 
 
 
@@ -342,13 +354,12 @@ class LessonDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, OwnerOrAdministrator]
 
 
     def get_queryset(self):
         course_id = self.request.query_params.get('course_id')
         lesson_id = self.request.query_params.get('lesson')
-        print("Querying comments for lesson:", lesson_id)
         if course_id:
             return Comment.objects.filter(course_id=course_id).order_by('-created_at')
         elif lesson_id:
@@ -363,75 +374,14 @@ class CommentViewSet(viewsets.ModelViewSet):
         
 
 
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import viewsets
-
-class CourseListCreateView(generics.ListCreateAPIView):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-
-class CourseRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-
-
-from rest_framework import generics, permissions
-from .models import Lecturer
-from .serializers import LecturerSerializer
-
 class LecturerViewSet(viewsets.ModelViewSet):
     queryset = Lecturer.objects.all()
     serializer_class = LecturerSerializer
-    permission_classes = [permissions.IsAdminUser]  # Only admins can add lecturers
-
-    def create(self, request, *args, **kwargs):
-        user = request.data.get('user')
-        if Lecturer.objects.filter(user_id=user).exists():
-            return Response({"error": "This user is already a lecturer"}, status=status.HTTP_400_BAD_REQUEST)
-        
-        return super().create(request, *args, **kwargs)
-    
-class LecturerListCreateView(generics.ListCreateAPIView):
-    queryset = Lecturer.objects.all()
-    serializer_class = LecturerSerializer
-    
-class LecturerDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Lecturer.objects.all()
-    serializer_class = LecturerSerializer
+    permission_classes = [IsAdministrator]
 
 
-
-class LecturerLoginView(APIView):
-    permission_classes = []
-
-    def post(self, request):
-        # Get credentials from the request
-        Email = request.data.get("Email")
-        password = request.data.get("password")
-
-        if not Email or not password:
-            return Response({"error": "Username and password are required."}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Authenticate the user
-        user = authenticate(request, Email=Email, password=password)
-
-        if user is not None:
-            if not user.is_active:
-                return Response({"error": "Your account is inactive."}, status=status.HTTP_400_BAD_REQUEST)
-
-            if hasattr(user, "lecturer"):
-                # User is a lecturer, so return the lecturer data and a token
-                token, created = Token.objects.get_or_create(user=user)
-                lecturer = user.lecturer  # Lecturer related to this user
-                serializer = LecturerSerializer(lecturer)
-                return Response({
-                    'token': token.key,
-                    'lecturer': serializer.data
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({"error": "This user is not a lecturer."}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+class LecturerLoginView(MyTokenObtainPairView):
+    """Compatibility URL using the same email/password JWT login for every role."""
 
 
 class CourseAttendanceView(APIView):
@@ -474,6 +424,7 @@ from rest_framework import status
 from django.core.mail import send_mail
 
 class ContactEmailView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         name = request.data.get('name')
         email = request.data.get('email')

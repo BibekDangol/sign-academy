@@ -13,10 +13,12 @@ from .views import (
 router = DefaultRouter()
 router.register(r'comments', CommentViewSet, basename='comments')
 router.register(r'lesson-progress', UserLessonProgressViewSet, basename='lesson-progress')
+router.register(r'lecturers', views.LecturerViewSet, basename='lecturers')
 
 urlpatterns = [
     path('token/', MyTokenObtainPairView.as_view(), name='token-obtain'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+    path('logout/', views.SessionLogoutView.as_view(), name='session-logout'),
     path('register/', views.RegisterView.as_view(), name="register-user"),
     path('change-password/', views.ChangePasswordView.as_view(), name="change-password"),
     path('edit-profile/', views.EditProfileView.as_view(), name="edit-profile"),

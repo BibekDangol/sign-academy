@@ -2,8 +2,15 @@ from pathlib import Path
 from datetime import timedelta
 import os
 
+from decouple import Config, Csv, RepositoryEnv
+from django.core.exceptions import ImproperlyConfigured
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Environment variables override the optional backend/.env file.
+env_path = Path(BASE_DIR) / '.env'
+config = Config(RepositoryEnv(str(env_path)) if env_path.is_file() else {})
 
 # Media settings
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -13,12 +20,14 @@ MEDIA_URL = '/media/'
 # See https://docs.djangoproject.com/en/5.0/howto/deploymentf/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-prl^b2ws47alar7&kmb_q-sdb-yct$k37-%mfevjbvi(&_+$x-'
+SECRET_KEY = config('DJANGO_SECRET_KEY')
+if not SECRET_KEY.strip():
+    raise ImproperlyConfigured('DJANGO_SECRET_KEY must not be blank.')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []  # Update this in production (e.g., ['example.com'])
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
 
 # Application definition
 INSTALLED_APPS = [
@@ -31,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "corsheaders",
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'api',  # Your app here
 ]
 
@@ -48,14 +58,13 @@ MIDDLEWARE = [
 ]
 
 # CORS settings: Update allowed origins for development or production
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Adjust to your frontend URL
-]
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000', cast=Csv())
 
 # REST framework settings (using JWT authentication)
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'api.authentication.SessionJWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',  # For TokenAuth
         'rest_framework.authentication.SessionAuthentication',  # For SessionAuth
     ),
@@ -90,11 +99,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'LMS',  # Name of your database
-        'USER': 'root',  # MySQL user
-        'PASSWORD': 'root',  # Your MySQL password
-        'HOST': '127.0.0.1',  # Database host (localhost)
-        'PORT': '3306',  # MySQL default port
+        'NAME': config('DB_NAME', default='LMS'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST', default='127.0.0.1'),
+        'PORT': config('DB_PORT', default='3306'),
     }
 }
 
@@ -129,8 +138,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # JWT Authentication settings
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60), 
-    "REFRESH_TOKEN_LIFETIME": timedelta(minutes=60),
+    "CHECK_REVOKE_TOKEN": True,
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": True,
@@ -156,7 +166,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 
     "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
-    "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
+    "TOKEN_REFRESH_SERIALIZER": "api.serializers.RoleTokenRefreshSerializer",
     "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
     "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
@@ -164,13 +174,13 @@ SIMPLE_JWT = {
 }
 
 # settings.py
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 
-EMAIL_HOST_USER = 'katwalutsab36@gmail.com'
-EMAIL_HOST_PASSWORD = 'opqf vlix bjzc sqtj'  # ← this must be your real Gmail App Password
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default=EMAIL_HOST_USER or 'webmaster@localhost')
 
