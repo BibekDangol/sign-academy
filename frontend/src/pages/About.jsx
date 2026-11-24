@@ -1,69 +1,75 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from './Navbar';
-import aboutBg from './img/image4.png';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import PageLayout from '../components/layout/PageLayout';
+import AuthContext from '../context/AuthContext';
+import { Button } from '../components/ui/button';
+import { Card, CardContent } from '../components/ui/card';
+import './About.css';
 
-const About = () => {
-  return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar /> 
+const highlights = [
+  {
+    label: 'See it. Practise it.',
+    title: 'Visual learning',
+    description: 'Follow video demonstrations, pause to study a sign, and revisit lessons as you build confidence at your own pace.',
+  },
+  {
+    label: 'Make it part of your day.',
+    title: 'Everyday communication',
+    description: 'Start with greetings and introductions, then practise questions and useful signs for the conversations that matter to you.',
+  },
+  {
+    label: 'Connect with understanding.',
+    title: 'Deaf culture',
+    description: 'Explore Deaf perspectives, communication etiquette, and the importance of respect and inclusion alongside your signing skills.',
+  },
+];
 
-      <main className="flex-1 flex justify-center items-center py-10 px-5 bg-cover bg-center" style={{ backgroundImage: `url(${aboutBg})` }}>
-        <div className="max-w-[800px] bg-white/90 p-4 md:p-10 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.15)] text-center">
-          <h1 className="text-[30px] md:text-[36px] font-bold text-black mb-5">About Us</h1>
-          <p className="text-[18px] leading-[1.6] text-[#333] mb-[15px]">
-            Welcome to Sign Academy, a learning management platform designed for the Deaf community...
+export default function About() {
+  const { user } = useContext(AuthContext);
+
+  return <PageLayout>
+    <main className="about-page">
+      <div className="about-container">
+        <header className="about-intro">
+          <p className="about-eyebrow">About Sign Academy</p>
+          <h1>Learn to sign.<br />Connect with confidence.</h1>
+          <p className="about-description">
+            Sign Academy helps learners build sign language skills through visual lessons and everyday practice.
+            Our aim is to make learning approachable and encourage respectful connections with the Deaf community.
           </p>
-          <p className="text-[18px] leading-[1.6] text-[#333] mb-[15px]">
-            Whether you want to learn sign language, develop communication skills...
-          </p>
-          <p className="text-[18px] leading-[1.6] text-[#333] mb-[15px]">
-            Join us and explore a barrier-free way of learning. Let's make education inclusive for everyone!
-          </p>
+        </header>
 
-          <Button asChild className="bg-[#0dd943] text-black font-bold py-[15px] px-10 text-[18px] rounded-[10px] hover:bg-[#0bbf3a]">
-            <Link to="/login">Start</Link>
-          </Button>
-        </div>
-      </main>
-
-      <footer className="bg-[#101010] text-white py-10 px-5 md:px-[60px]">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="flex flex-col md:flex-row md:flex-wrap justify-between">
-            <div className="w-full md:w-auto flex-1 min-w-[250px] mb-[30px]">
-              <h3 className="text-[22px] mb-[15px]">Useful Links</h3>
-              <ul className="list-none p-0">
-                <li className="mb-2.5"><a className="text-white no-underline text-base transition-colors duration-300 hover:text-[#0dd943]" href="#about">About Us</a></li>
-                <li className="mb-2.5"><a className="text-white no-underline text-base transition-colors duration-300 hover:text-[#0dd943]" href="#services">Our Services</a></li>
-                <li className="mb-2.5"><a className="text-white no-underline text-base transition-colors duration-300 hover:text-[#0dd943]" href="#contact">Contact Us</a></li>
-              </ul>
-            </div>
-            <div className="w-full md:w-auto flex-1 min-w-[250px] mb-[30px]">
-              <h3 className="text-[22px] mb-[15px]">Connect with Us</h3>
-              <ul className="list-none p-0">
-                <li className="mb-2.5"><a className="text-white no-underline text-base transition-colors duration-300 hover:text-[#0dd943]" href="#">Facebook</a></li>
-                <li className="mb-2.5"><a className="text-white no-underline text-base transition-colors duration-300 hover:text-[#0dd943]" href="#">Twitter</a></li>
-                <li className="mb-2.5"><a className="text-white no-underline text-base transition-colors duration-300 hover:text-[#0dd943]" href="#">Instagram</a></li>
-                <li className="mb-2.5"><a className="text-white no-underline text-base transition-colors duration-300 hover:text-[#0dd943]" href="#">LinkedIn</a></li>
-              </ul>
-            </div>
-            <div className="w-full md:w-auto flex-1 min-w-[250px] mb-[30px]">
-              <h3 className="text-[22px] mb-[15px]">Subscribe to Our Newsletter</h3>
-              <form className="flex flex-col items-start">
-                <Input type="email" placeholder="Enter your email" className="p-2.5 w-full max-w-[250px] mb-2.5 border-2 border-white bg-[#222] text-white" />
-                <Button type="submit" variant="secondary" className="font-bold">Subscribe</Button>
-              </form>
-            </div>
+        <section className="about-learning" aria-labelledby="about-learning-title">
+          <div className="about-section-heading">
+            <h2 id="about-learning-title">More than learning a new skill</h2>
+            <p>Build a foundation in signing, put it into practice, and understand the community behind the language.</p>
           </div>
-          <p className="footer-copyright text-center text-sm mt-5">
-            © 2024 Sign Academy. All rights reserved.
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
-};
+          <div className="about-highlights">
+            {highlights.map(highlight => (
+              <Card className="about-highlight" key={highlight.title}>
+                <CardContent>
+                  <p className="about-highlight-label">{highlight.label}</p>
+                  <h3>{highlight.title}</h3>
+                  <p>{highlight.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
 
-export default About;
+        <section className="about-next-step" aria-labelledby="about-next-title">
+          <div>
+            <h2 id="about-next-title">Your first signs are a start.</h2>
+            <p>Take the next step toward clearer communication and meaningful connections.</p>
+          </div>
+          <div className="about-actions">
+            <Button asChild className="about-course-link">
+              <Link to={user ? '/courses' : '/login'} state={user ? undefined : { from: '/courses' }}>Explore Courses</Link>
+            </Button>
+            <p>Have questions? <Link to="/contacts">Contact Us</Link></p>
+          </div>
+        </section>
+      </div>
+    </main>
+  </PageLayout>;
+}

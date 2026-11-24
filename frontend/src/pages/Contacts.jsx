@@ -1,121 +1,76 @@
-import React, { useRef, useEffect, useState } from 'react';
-import * as handpose from '@tensorflow-models/handpose';
-import * as tf from '@tensorflow/tfjs';
-import Webcam from 'react-webcam';
-import { drawHand } from './utilities';
-import { createModel, predictSign } from './sign_detection_model';
-import Navbar from './Navbar';
+import React, { useState } from 'react';
+import PageLayout from '../components/layout/PageLayout';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Textarea } from '../components/ui/textarea';
+import { publicApi } from '../utils/api';
+import useSubmission from '../hooks/useSubmission';
+import './Home.css';
 
-const Contact = () => {
-  const webcamRef = useRef(null);
-  const canvasRef = useRef(null);
-  const animationRef = useRef(null);
-  const [loading, setLoading] = useState(true);
-  const [model, setModel] = useState(null);
-  const [prediction, setPrediction] = useState('');
-  const [error, setError] = useState('');
+const emptyForm = { name: '', email: '', message: '' };
 
-  // Initialize TensorFlow.js and load models
-  useEffect(() => {
-    const initializeModels = async () => {
-      try {
-        await tf.setBackend('webgl');
-        await tf.ready();
-        
-        const handModel = await handpose.load();
-        const signModel = createModel();
-        
-        setModel({ hand: handModel, sign: signModel });
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to initialize models. Please check your webcam access and internet connection.');
-        console.error(err);
-      }
-    };
+export default function Contacts() {
+  const [contactData, setContactData] = useState(emptyForm);
+  const [status, setStatus] = useState(null);
+  const { submitting, run } = useSubmission();
 
-    initializeModels();
+  const handleChange = event => {
+    setContactData(previous => ({ ...previous, [event.target.name]: event.target.value }));
+    setStatus(null);
+  };
 
-    return () => {
-      cancelAnimationFrame(animationRef.current);
-      tf.disposeVariables();
-    };
-  }, []);
-
-  // Hand detection loop
-  useEffect(() => {
-    const detectHand = async () => {
-      try {
-        if (webcamRef.current?.video?.readyState !== 4 || !model) return;
-
-        const video = webcamRef.current.video;
-        const { videoWidth, videoHeight } = video;
-        
-        canvasRef.current.width = videoWidth;
-        canvasRef.current.height = videoHeight;
-        
-        const hands = await model.hand.estimateHands(video, true);
-        const ctx = canvasRef.current.getContext('2d');
-        
-        ctx.clearRect(0, 0, videoWidth, videoHeight);
-        
-        if (hands.length > 0) {
-          drawHand(hands[0].landmarks, ctx);
-          const sign = await predictSign(model.sign, hands[0].landmarks);
-          setPrediction(sign);
-        }
-
-      } catch (err) {
-        console.error('Detection error:', err);
-      }
-      
-      animationRef.current = requestAnimationFrame(detectHand);
-    };
-
-    if (!loading && !error) {
-      animationRef.current = requestAnimationFrame(detectHand);
+  const handleSubmit = async event => {
+    event.preventDefault();
+    if (submitting) return;
+    if (!contactData.name.trim() || !contactData.message.trim()) {
+      setStatus({ ok: false, message: 'Please enter your name and message.' });
+      return;
     }
+    setStatus(null);
+    await run(async () => {
+      try {
+        await publicApi.post('contact/', {
+          name: contactData.name.trim(),
+          email: contactData.email.trim(),
+          message: contactData.message.trim(),
+        });
+        setStatus({ ok: true, message: 'Your message has been sent. Thank you for getting in touch!' });
+        setContactData(emptyForm);
+      } catch {
+        setStatus({ ok: false, message: 'Your message could not be sent. Please try again.' });
+      }
+    });
+  };
 
-    return () => cancelAnimationFrame(animationRef.current);
-  }, [loading, model, error]);
-
-  return (
-    <div className="flex flex-col min-h-screen bg-[#f5f5f5]">
-      <Navbar />
-      <div className="main-content">
-        <h2 className="title">Real-Time Hand Sign Detection</h2>
-        
-        {error && <div className="text-[#e74c3c] p-4 bg-[#fdeded] rounded mb-4">{error}</div>}
-        
-        <div className="relative w-[calc(100%-2rem)] max-w-[640px] mx-auto mb-8">
-          {loading ? (
-            <div className="flex flex-col items-center gap-4 p-8">
-              <div className="w-10 h-10 border-4 border-[#f3f3f3] border-t-[#3498db] rounded-full animate-spin"></div>
-              <p>Initializing models...</p>
-            </div>
-          ) : (
-            <>
-              <Webcam
-                ref={webcamRef}
-                className="!w-full !h-auto rounded-lg"
-                mirrored={true}
-                screenshotFormat="image/jpeg"
-              />
-              <canvas
-                ref={canvasRef}
-                className="!w-full !h-auto rounded-lg absolute top-0 left-0 pointer-events-none"
-              />
-            </>
-          )}
+  return <PageLayout>
+    <main className="home-content home-section contact contact-page">
+      <header className="home-section-heading">
+        <p className="home-section-eyebrow">We're here to help</p>
+        <h1>Contact Us</h1>
+        <p>Ask about our courses, get help getting started, or share your feedback.</p>
+      </header>
+      <form onSubmit={handleSubmit} aria-label="Contact us" aria-busy={submitting}>
+        <div className="contact-field">
+          <Label htmlFor="contact-name">Your name</Label>
+          <Input id="contact-name" name="name" autoComplete="name" placeholder="Enter your name"
+            value={contactData.name} onChange={handleChange} disabled={submitting} required />
         </div>
-
-        {prediction && (
-          <div className="prediction-banner">
-            Detected Sign: <span className="text-[#3498db] font-bold">{prediction}</span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default Contact;
+        <div className="contact-field">
+          <Label htmlFor="contact-email">Email address</Label>
+          <Input id="contact-email" name="email" type="email" autoComplete="email" placeholder="you@example.com"
+            value={contactData.email} onChange={handleChange} disabled={submitting} required />
+        </div>
+        <div className="contact-field">
+          <Label htmlFor="contact-message">Message</Label>
+          <Textarea id="contact-message" name="message" placeholder="How can we help?" rows={5}
+            value={contactData.message} onChange={handleChange} disabled={submitting} required />
+        </div>
+        <Button type="submit" disabled={submitting} className="contact-submit">
+          {submitting ? 'Sending...' : 'Send message'}
+        </Button>
+        {status && <p role={status.ok ? 'status' : 'alert'} className={status.ok ? 'text-green-700' : 'text-red-700'}>{status.message}</p>}
+      </form>
+    </main>
+  </PageLayout>;
+}

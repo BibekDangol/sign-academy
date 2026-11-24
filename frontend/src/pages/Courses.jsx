@@ -5,13 +5,15 @@ import useAxios from '../utils/useAxios';
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { FaArrowRight, FaBookOpen, FaCheck, FaRegCalendarCheck } from 'react-icons/fa';
+import './Courses.css';
 
 const CoursesPage = () => {
   const { courses, lessons, lessonProgress } = useLearningData();
   const [selectedCourseId, setSelectedCourseId] = useState(null);
   const [completedLessons, setCompletedLessons] = useState({});
   const api = useAxios();
-  const navigate = useNavigate(); // ✅ Added
+  const navigate = useNavigate();
 
   useEffect(() => {
     const progressMap = {};
@@ -75,132 +77,104 @@ const CoursesPage = () => {
     (l) => completedLessons[l.id]?.completed,
   ).length;
 
-  return (
-    <div className="text-red-600">
-      <PageLayout>
-      <main className="py-5 bg-[#f4f4f4] min-h-[calc(100vh-200px)]">
-        {selectedCourseId === null ? (
-          courses.map((course) => {
-            const lessonCount = getLessonCount(course.id);
-            const courseCompletedCount = lessons.filter(
-              (l) =>
-                l.course === course.id && completedLessons[l.id]?.completed,
-            ).length;
+  const totalCompleted = lessons.filter(lesson => completedLessons[lesson.id]?.completed).length;
+  const overallProgress = lessons.length ? Math.round(totalCompleted / lessons.length * 100) : 0;
 
-            return (
-              <Card
-                className="flex flex-col md:flex-row bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] overflow-hidden my-6 mx-auto max-w-[95%] [font-family:'Segoe_UI',sans-serif] transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(0,0,0,0.15)]"
-                key={course.id}
-              >
-                <div className="bg-[#00acc1] p-4 md:p-[30px] w-full md:w-[30%] text-white flex flex-col justify-center text-left">
-                  <p className="font-semibold text-sm tracking-[1px] uppercase mb-3">
-                    COURSE
-                  </p>
-                  <h2 className="text-xl md:text-[26px] leading-[1.2] mb-2">
-                    {course.title}
-                  </h2>
-                  <p className="text-base font-light">Chapters</p>
-                </div>
-                <div className="bg-white p-4 md:p-[30px] w-full md:w-[70%] flex flex-col justify-between">
-                  <p className="text-[#00acc1] font-bold text-sm mb-[5px]">
-                    CHAPTERS: {lessonCount}
-                  </p>
-                  <h3 className="text-lg text-[#333333] leading-[1.5] mb-5">
-                    {course.description}
-                  </h3>
-                  <div className="h-1.5 bg-[#e0e0e0] rounded-[3px] overflow-hidden mb-2">
-                    <div
-                      className="h-1.5 bg-[#00acc1] rounded-[3px] transition-[width] duration-[400ms] ease-in-out"
-                      style={{
-                        width: `${(courseCompletedCount / lessonCount) * 100}%`,
-                      }}
-                    ></div>
-                  </div>
-                  <p className="text-sm text-[#666] self-end">
-                    {courseCompletedCount}/{lessonCount} Lessons Completed
-                  </p>
-                  <Button
-                    className="bg-[#00acc1] text-white py-2.5 px-6 text-base font-medium rounded-[30px] cursor-pointer transition-colors duration-300 self-end mt-2.5 hover:bg-[#008ba3]"
-                    onClick={() => setSelectedCourseId(course.id)}
-                  >
-                    Continue
-                  </Button>
-                  <Button
-                    className="mt-2.5 bg-[#f0ad4e] text-white py-2.5 px-[15px] cursor-pointer rounded-[5px] font-bold hover:bg-[#ec971f]"
-                    onClick={() => handleAttendance(course.id)}
-                  >
-                    Course Attendance
-                  </Button>
-                </div>
-              </Card>
-            );
-          })
-        ) : (
-          <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-4 md:p-[30px] my-5 mx-auto max-w-[90%] [font-family:'Segoe_UI',sans-serif] transition-all duration-300">
-            <h2 className="text-xl md:text-[26px] mb-5 text-[#00acc1]">
-              {selectedCourse.title} – Lessons
-            </h2>
-            <Button
-              className="bg-[#00acc1] text-white py-2.5 px-[18px] text-sm rounded-[20px] cursor-pointer mb-5 transition-colors duration-300 hover:bg-[#008ba3]"
-              onClick={() => setSelectedCourseId(null)}
-            >
-              ← Back to Courses
-            </Button>
-            {selectedLessons.map((lesson, index) => (
-              <Card
-                className="flex flex-col md:flex-row rounded-xl overflow-hidden my-5 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.08)] [font-family:'Segoe_UI',sans-serif]"
-                key={lesson.id}
-              >
-                <div className="bg-[#4dd0e1] text-white p-5 w-full md:w-[35%] flex flex-col justify-center">
-                  <p className="text-sm uppercase mb-2">LESSON</p>
-                  <h3 className="text-lg md:text-[22px] leading-[1.2]">
-                    {lesson.title}
-                  </h3>
-                </div>
-                <div className="p-5 w-full md:w-[65%] relative">
-                  <p className="text-sm text-[#4dd0e1] font-bold mb-2">
-                    LESSON {index + 1}
-                  </p>
-                  <p className="text-base mb-5">
-                    {completedLessons[lesson.id]?.completed
-                      ? "You have completed this lesson."
-                      : "This lesson is not completed yet."}
-                  </p>
-                  <div className="flex gap-2.5 mb-2.5">
-                    <Button
-                      className="bg-[#66bb6a] text-white py-2.5 px-[18px] rounded-[20px] text-sm cursor-pointer mb-5 transition-colors duration-300 hover:bg-[#43a047]"
-                      onClick={() => toggleCompletion(lesson.id)}
-                    >
-                      {completedLessons[lesson.id]?.completed
-                        ? "Mark as Incomplete"
-                        : "Mark as Done"}
-                    </Button>
-                    <Button
-                      className="bg-[#4dd0e1] text-white py-2.5 px-[18px] rounded-[20px] text-sm cursor-pointer mb-5 transition-colors duration-300 hover:bg-[#00acc1]"
-                      onClick={() =>
-                        navigate(
-                          `/course/${selectedCourse.id}/lesson/${lesson.id}`,
-                        )
-                      }
-                    >
-                      Start
-                    </Button>
-                  </div>
-                  {/* <span className="lesson-time">4 min</span> */}
-                  {completedLessons[lesson.id]?.completed && (
-                    <span className="absolute top-[14px] right-5 text-[#4caf50] text-2xl">
-                      ✔
-                    </span>
-                  )}
-                </div>
-              </Card>
-            ))}
+  return <PageLayout>
+    <main className="learning-page">
+      <div className="learning-container">
+        {selectedCourseId === null ? <>
+          <header className="learning-welcome">
+            <div className="learning-welcome-copy">
+              <p className="learning-eyebrow">Your learning space</p>
+              <h1>A little practice.<br />A world of connection.</h1>
+              <p>Find your next lesson and keep building your confidence, one sign at a time.</p>
+            </div>
+            <div className="learning-overview">
+              <div className="learning-ring" style={{ '--progress': `${overallProgress}%` }}>
+                <span>{overallProgress}%</span>
+              </div>
+              <div><strong>Your progress</strong><p>{totalCompleted} of {lessons.length} lessons completed</p></div>
+            </div>
+          </header>
+
+          <div className="learning-section-heading">
+            <div><p className="learning-eyebrow">Keep exploring</p><h2>Your courses</h2></div>
+            <span className="learning-count">{courses.length} {courses.length === 1 ? 'course' : 'courses'} available</span>
           </div>
-        )}
-      </main>
-      </PageLayout>
-    </div>
-  );
+          <div className="learning-course-grid">
+            {courses.map((course, index) => {
+              const lessonCount = getLessonCount(course.id);
+              const done = lessons.filter(lesson => lesson.course === course.id && completedLessons[lesson.id]?.completed).length;
+              const percent = lessonCount ? Math.round(done / lessonCount * 100) : 0;
+              return <Card className={`learning-course learning-tone-${index % 3}`} key={course.id}>
+                <div className="learning-course-cover">
+                  <div className="learning-cover-meta">
+                    <span className="learning-cover-label"><FaBookOpen aria-hidden="true" /> Course {String(index + 1).padStart(2, '0')}</span>
+                    <span className="learning-status">{lessonCount > 0 && done === lessonCount ? 'Completed' : done ? 'In progress' : 'Ready to explore'}</span>
+                  </div>
+                  <h3>{course.title}</h3>
+                  <p>{lessonCount} {lessonCount === 1 ? 'lesson' : 'lessons'} · Learn at your pace</p>
+                  <span className="learning-cover-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                </div>
+                <div className="learning-course-body">
+                  <p className="learning-description">{course.description}</p>
+                  <div className="learning-progress-label"><span>{done} of {lessonCount} lessons completed</span><strong>{percent}%</strong></div>
+                  <div className="learning-progress" role="progressbar" aria-label={`${course.title} progress`}
+                    aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent}>
+                    <div style={{ width: `${percent}%` }} />
+                  </div>
+                  <div className="learning-course-actions">
+                    <Button variant="ghost" className="learning-attendance" onClick={() => handleAttendance(course.id)}>
+                      <FaRegCalendarCheck aria-hidden="true" /> Attendance
+                    </Button>
+                    <Button className="learning-primary" onClick={() => setSelectedCourseId(course.id)}>
+                      {done ? 'Continue learning' : 'Explore lessons'} <FaArrowRight aria-hidden="true" />
+                    </Button>
+                  </div>
+                </div>
+              </Card>;
+            })}
+          </div>
+        </> : <>
+          <nav className="learning-breadcrumb" aria-label="Course navigation">
+            <button type="button" onClick={() => setSelectedCourseId(null)}>All courses</button>
+            <span aria-hidden="true">/</span><span aria-current="page">{selectedCourse?.title}</span>
+          </nav>
+          <header className="learning-welcome learning-lesson-welcome">
+            <div className="learning-welcome-copy">
+              <p className="learning-eyebrow">One step at a time</p>
+              <h1>{selectedCourse?.title}</h1>
+              <p>{selectedCourse?.description}</p>
+            </div>
+            <div className="learning-lesson-count"><strong>{completedCount}<span> / {selectedLessons.length}</span></strong><p>lessons completed</p></div>
+          </header>
+          <div className="learning-section-heading"><div><p className="learning-eyebrow">Your next steps</p><h2>Course lessons</h2></div></div>
+          <div className="learning-lessons">
+            {selectedLessons.length === 0 && <p className="learning-empty">Lessons will appear here when they are added to this course.</p>}
+            {selectedLessons.map((lesson, index) => {
+              const completed = Boolean(completedLessons[lesson.id]?.completed);
+              return <Card className={`learning-lesson ${completed ? 'is-complete' : ''}`} key={lesson.id}>
+                <span className="learning-lesson-number" aria-hidden="true">{completed ? <FaCheck /> : String(index + 1).padStart(2, '0')}</span>
+                <div className="learning-lesson-details">
+                  <p className="learning-eyebrow">Lesson {index + 1} <span>· {completed ? 'Completed' : 'Not completed'}</span></p>
+                  <h3>{lesson.title}</h3>
+                </div>
+                <div className="learning-lesson-actions">
+                  <Button variant="ghost" className="learning-completion" aria-pressed={completed} onClick={() => toggleCompletion(lesson.id)}>
+                    {completed ? 'Mark incomplete' : 'Mark as done'}
+                  </Button>
+                  <Button className="learning-primary" onClick={() => navigate(`/course/${selectedCourse.id}/lesson/${lesson.id}`)}>
+                    {completed ? 'Review' : 'Start lesson'} <FaArrowRight aria-hidden="true" />
+                  </Button>
+                </div>
+              </Card>;
+            })}
+          </div>
+        </>}
+      </div>
+    </main>
+  </PageLayout>;
 };
 
 export default CoursesPage;

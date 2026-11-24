@@ -4,7 +4,6 @@ import { validateEmail, fieldErrors, errorMessage } from '../utils/formErrors';
 import React, { useContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
-import backgroundImage from './img/loginimg.jpg';
 
 const Login = () => {
   const { loginUser } = useContext(AuthContext);
@@ -44,13 +43,13 @@ const Login = () => {
     });
   };
 
-  return <AuthForm title="Login" label="Login" backgroundImage={backgroundImage} width={450}
+  return <AuthForm title="Welcome back" description="Log in to continue your learning journey." label="Login"
     onSubmit={handleSubmit} submitting={submitting} submitLabel="Login" pendingLabel="Logging in…"
-    error={formError} linkPrompt="Don’t have an account?" linkTo="/register" linkLabel="Register">
-    <AuthField id="email" label="Email:" type="email" autoComplete="email" disabled={submitting}
+    error={formError} linkPrompt="Don’t have an account?" linkTo="/register" linkLabel="Sign up">
+    <AuthField id="email" label="Email address" placeholder="you@example.com" type="email" autoComplete="email" disabled={submitting}
       error={emailError} errorId="login-email-error" value={email}
       onChange={e => { setEmail(e.target.value); setEmailError(''); setFormError(''); }} />
-    <AuthField id="password" label="Password:" type="password" autoComplete="current-password" disabled={submitting}
+    <AuthField id="password" label="Password" placeholder="Enter your password" type="password" autoComplete="current-password" disabled={submitting}
       error={passwordError} errorId="login-password-error" value={password}
       onChange={e => { setPassword(e.target.value); setPasswordError(''); setFormError(''); }} />
   </AuthForm>;

@@ -51,7 +51,7 @@ const Navbar = () => {
     : [
       { to: "/", label: "Home" },
       { to: "/about", label: "About" },
-      { to: "/courses", label: "Courses" },
+      { to: "/login", state: { from: "/courses" }, label: "Courses" },
     ];
 
   return (
@@ -101,6 +101,7 @@ const Navbar = () => {
               <li key={link.to + link.label}>
                 <Link
                   to={link.to}
+                  state={link.state}
                   onClick={() => setMobileOpen(false)}
                   className={linkClass}
                 >

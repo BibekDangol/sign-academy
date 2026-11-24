@@ -81,15 +81,123 @@
   background: #f8fafc;
 }
 
-.home-content .testimonials-section .grid > div > div {
-  min-height: 12rem;
-  justify-content: space-between;
-  gap: 1.5rem;
+.home-content .courses-section .grid > div,
+.home-content .categories-section .grid > div {
+  background: #fff;
+  text-align: left;
 }
 
-.home-content .testimonials-section p:last-child {
-  font-style: normal;
+.home-content .courses-section .grid > div > div,
+.home-content .categories-section .grid > div > div {
+  justify-content: flex-start;
+  padding: 1.75rem;
+}
+
+.home-content .courses-section .grid p,
+.home-content .categories-section .grid p {
+  color: #64748b;
+  text-align: left;
+}
+
+.home-section-heading,
+.testimonials-heading {
+  max-width: 42rem;
+  margin: 0 auto 2.25rem;
+  text-align: center;
+}
+
+.home-content .home-section-eyebrow,
+.home-content .testimonials-eyebrow {
+  margin-bottom: 0.75rem;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home-content .home-section-heading h2,
+.home-content .testimonials-heading h2 {
+  margin-bottom: 0.875rem;
+}
+
+.home-content .home-section-heading > p:last-child,
+.home-content .testimonials-heading > p:last-child {
+  color: #64748b;
+}
+
+.home-content .testimonial-card {
+  background: #fff;
+  text-align: left;
+}
+
+.home-content .testimonials-grid > div > div {
+  justify-content: flex-start;
+  padding: 1.75rem;
+}
+
+.testimonial-quote-mark {
+  display: block;
+  height: 2.75rem;
+  color: #475569;
+  font-family: Georgia, serif;
+  font-size: 4.5rem;
+  line-height: 1;
+}
+
+.home-content .testimonial-card h3 {
+  margin: 1rem 0 0.75rem;
+  font-size: 1.125rem;
+}
+
+.testimonial-story {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 0;
+}
+
+.testimonial-story blockquote {
+  margin: 0 0 1.75rem;
+}
+
+.home-content .testimonial-story p {
+  text-align: left;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.testimonial-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: #f1f5f9;
   color: #0f172a;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.home-content .testimonial-name {
+  color: #0f172a;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.home-content .testimonial-course {
+  margin-top: 0.125rem;
+  color: #64748b;
+  font-size: 0.8125rem;
 }
 
 .home-content > hr {
@@ -105,6 +213,61 @@
   border-top: 1px solid #e2e8f0;
 }
 
+.help-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  max-width: 70rem;
+  margin: 0 auto;
+}
+
+.home-content .help-content h2 {
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.home-content .help-content p {
+  max-width: 40rem;
+  color: #64748b;
+  text-align: left;
+}
+
+.help-content .help-link,
+.home-content.contact .contact-submit {
+  flex-shrink: 0;
+  height: 3rem;
+  padding: 0.75rem 1.5rem;
+  background: #0f172a;
+  color: #fff;
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.help-content .help-link:hover,
+.home-content.contact .contact-submit:hover {
+  background: #334155;
+}
+
+.contact-page {
+  background: #f8fafc;
+}
+
+.contact-page h1 {
+  margin: 0 0 0.875rem;
+  font-family: inherit;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0f172a;
+  text-transform: none;
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .home-content.contact form {
   display: flex;
   flex-direction: column;
@@ -113,6 +276,7 @@
   max-width: 38rem;
   margin: 0 auto;
   padding: 2rem;
+  background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 0.875rem;
   box-shadow: 0 4px 16px rgb(15 23 42 / 5%);
@@ -152,6 +316,16 @@
 }
 
 @media (max-width: 600px) {
+  .help-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .help-content .help-link {
+    width: 100%;
+  }
+
   .home-content .home-section,
   .home-content.home-section {
     padding: 2.5rem 1rem;

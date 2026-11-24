@@ -1,0 +1,198 @@
+.about-page {
+  padding: 4.5rem 1.25rem 3.5rem;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.about-container {
+  max-width: 70rem;
+  margin: 0 auto;
+}
+
+.about-intro {
+  max-width: 46rem;
+  margin: 0 auto 3.5rem;
+  text-align: center;
+}
+
+.about-page p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.about-page .about-eyebrow {
+  margin-bottom: 1rem;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.about-page h1 {
+  margin: 0 0 1.5rem;
+  color: #0f172a;
+  font-family: inherit;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  text-transform: none;
+}
+
+.about-page .about-description {
+  color: #64748b;
+  font-size: 1.0625rem;
+}
+
+.about-section-heading {
+  max-width: 42rem;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.about-page h2 {
+  margin: 0 0 0.75rem;
+  color: #0f172a;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.about-section-heading p,
+.about-next-step p {
+  color: #64748b;
+}
+
+.about-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.about-highlight {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.875rem;
+  background: #fff;
+  box-shadow: 0 4px 16px rgb(15 23 42 / 5%);
+}
+
+.about-highlight > div {
+  padding: 1.75rem;
+}
+
+.about-highlight p {
+  color: #64748b;
+  text-align: left;
+}
+
+.about-page .about-highlight-label {
+  margin-bottom: 1rem;
+  color: #475569;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.about-highlight h3 {
+  margin: 0 0 0.75rem;
+  color: #0f172a;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.about-next-step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 3.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.about-next-step > div:first-child {
+  max-width: 38rem;
+}
+
+.about-next-step > div:first-child p {
+  text-align: left;
+}
+
+.about-actions {
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.about-actions .about-course-link {
+  height: 3rem;
+  padding: 0.75rem 1.5rem;
+  background: #0f172a;
+  color: #fff;
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.about-actions .about-course-link:hover {
+  background: #334155;
+}
+
+.about-actions p {
+  margin-top: 0.875rem;
+  font-size: 0.875rem;
+}
+
+.about-actions p a {
+  color: #0f172a;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.about-actions p a:hover {
+  color: #475569;
+}
+
+@media (max-width: 900px) {
+  .about-highlights {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 42rem;
+    margin: 0 auto;
+  }
+
+  .about-next-step {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .about-next-step > div:first-child p {
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-page {
+    padding: 2.5rem 1rem;
+  }
+
+  .about-intro {
+    margin-bottom: 2.5rem;
+  }
+
+  .about-highlight > div {
+    padding: 1.5rem;
+  }
+
+  .about-next-step {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+  }
+
+  .about-actions,
+  .about-actions .about-course-link {
+    width: 100%;
+  }
+}

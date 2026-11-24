@@ -1,0 +1,52 @@
+.alphabet-practice-column,
+.alphabet-reference-column { min-width: 0; display: flex; flex-direction: column; gap: 1.5rem; }
+.alphabet-camera video { transform: scaleX(-1); }
+.alphabet-landmarks { position: absolute; inset: 0; width: 100%; height: 100%; transform: scaleX(-1); pointer-events: none; }
+.alphabet-live-result { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; border-top: 1px solid #2d434b; background: #152b32; }
+.alphabet-live-letter { display: grid; place-items: center; flex-shrink: 0; width: 3rem; height: 3rem; border: 1px solid #3b665b; border-radius: 0.625rem; background: #24483e; color: #b6ead5; font-size: 1.75rem; font-weight: 600; }
+.alphabet-live-result strong { color: #e6f4ed; font-size: 0.875rem; font-weight: 500; }
+.alphabet-live-result p { color: #a8c2b8; font-size: 0.75rem; }
+.alphabet-output { padding: 1.75rem; border: 1px solid #dcd5e8; border-radius: 1rem; background: #f0ecf5; }
+.alphabet-output-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
+.alphabet-output .handsign-eyebrow { color: #75618e; }
+.alphabet-output h2 { color: #3e3154; font-size: 1.25rem; }
+.alphabet-letter-count { padding: 0.25rem 0.625rem; border: 1px solid #d9d0e5; border-radius: 2rem; background: #fff; color: #756581; font-size: 0.75rem; white-space: nowrap; }
+.alphabet-letter-tray { display: flex; align-content: flex-start; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; min-height: 6rem; padding: 1rem; border: 1px solid #ded7e6; border-radius: 0.75rem; background: #fff; }
+.alphabet-letter-tray p { color: #81728f; font-size: 0.875rem; }
+.alphabet-letter-tile { display: grid; place-items: center; min-width: 2.5rem; height: 2.75rem; padding: 0 0.5rem; border: 1px solid #d8cde4; border-radius: 0.5rem; background: #f4f0f8; color: #4d395f; font-size: 1.25rem; font-weight: 600; }
+.alphabet-output-footer { margin-top: 1rem; }
+.alphabet-output-footer > p { color: #756581; font-size: 0.75rem; }
+.alphabet-controls { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+.alphabet-controls .alphabet-backspace,
+.alphabet-controls .alphabet-clear { min-height: 2.625rem; height: auto; padding: 0.625rem 1rem; border-radius: 0.5rem; font-size: 0.8125rem; }
+.alphabet-controls .alphabet-backspace { border: 1px solid #c9bbd8; background: #fff; color: #4d395f; }
+.alphabet-controls .alphabet-backspace:hover { background: #e7dfef; }
+.alphabet-controls .alphabet-clear { background: transparent; color: #755e87; box-shadow: none; }
+.alphabet-controls .alphabet-clear:hover { background: #e7dfef; color: #4d395f; }
+.alphabet-reference { overflow: hidden; border: 1px solid #e1e3df; border-radius: 1rem; background: #fff; box-shadow: 0 4px 18px rgb(15 23 42 / 4%); }
+.alphabet-reference-heading { padding: 1.5rem 1.5rem 1rem; }
+.alphabet-reference-heading h2 { display: flex; align-items: center; gap: 0.625rem; font-size: 1rem; }
+.alphabet-reference-heading h2 svg { color: #75618e; }
+.alphabet-reference-heading > p:last-child { margin-top: 0.625rem; color: #64748b; font-size: 0.8125rem; }
+.alphabet-chart-link { display: block; margin: 0 1rem; border: 1px solid #edf0ee; border-radius: 0.625rem; background: #fff; }
+.alphabet-chart-link img { display: block; width: 100%; height: 25rem; object-fit: contain; }
+.alphabet-expand { display: flex; justify-content: center; align-items: center; gap: 0.5rem; padding: 1rem; color: #55436b; font-size: 0.8125rem; text-decoration: underline; text-underline-offset: 3px; }
+.alphabet-expand:hover { color: #352545; }
+.alphabet-chart-link:focus-visible,
+.alphabet-expand:focus-visible,
+.alphabet-other-practice a:focus-visible { outline: 2px solid #75618e; outline-offset: 3px; border-radius: 0.25rem; }
+.alphabet-tips > p { margin-top: 0.75rem; font-size: 0.8125rem; }
+.alphabet-other-practice { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
+.alphabet-other-practice p { color: #64748b; font-size: 0.875rem; }
+.alphabet-other-practice a { color: #334155; font-size: 0.875rem; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
+.alphabet-other-practice a:hover { color: #0f172a; }
+@media (max-width: 900px) {
+  .alphabet-reference-column { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: start; }
+}
+@media (max-width: 600px) {
+  .alphabet-reference-column { display: flex; }
+  .alphabet-output { padding: 1.25rem; }
+  .alphabet-live-result { padding: 1rem; }
+  .alphabet-chart-link img { height: auto; max-height: 32rem; }
+  .alphabet-controls > button { flex: 1; }
+}

@@ -4,7 +4,6 @@ import { validateEmail, fieldErrors } from '../utils/formErrors';
 import React, { useState, useContext } from 'react';
 
 import AuthContext from '../context/AuthContext';
-import backgroundImage from './img/img4.jpg'; // Background image
 
 const Register = () => {
   const { registerUser } = useContext(AuthContext);
@@ -51,15 +50,15 @@ const Register = () => {
     });
   };
 
-  return <AuthForm title="Sign Up" label="Registration" backgroundImage={backgroundImage} width={500}
+  return <AuthForm title="Create your account" description="Start with your first signs. Build meaningful connections." label="Registration"
     onSubmit={handleSubmit} submitting={submitting} submitLabel="Create Account" pendingLabel="Creating account…"
     error={errors.form} linkPrompt="Already have an account?" linkTo="/login" linkLabel="Login">
     {[
-      { id: 'fullName', field: 'full_name', label: 'Full Name:', autoComplete: 'name', value: fullName, set: setFullName },
-      { id: 'username', field: 'username', label: 'Username:', autoComplete: 'username', value: username, set: setUsername },
-      { id: 'email', field: 'email', label: 'Email:', type: 'email', autoComplete: 'email', value: email, set: setEmail },
-      { id: 'password', field: 'password', label: 'Password:', type: 'password', autoComplete: 'new-password', value: password, set: setPassword },
-      { id: 'confirmPassword', field: 'password2', label: 'Confirm Password:', type: 'password', autoComplete: 'new-password', value: confirmPassword, set: setConfirmPassword },
+      { id: 'fullName', field: 'full_name', label: 'Full name', placeholder: 'Enter your full name', autoComplete: 'name', value: fullName, set: setFullName },
+      { id: 'username', field: 'username', label: 'Username', placeholder: 'Choose a username', autoComplete: 'username', value: username, set: setUsername },
+      { id: 'email', field: 'email', label: 'Email address', placeholder: 'you@example.com', type: 'email', autoComplete: 'email', value: email, set: setEmail },
+      { id: 'password', field: 'password', label: 'Password', placeholder: 'At least 8 characters', type: 'password', autoComplete: 'new-password', value: password, set: setPassword },
+      { id: 'confirmPassword', field: 'password2', label: 'Confirm password', placeholder: 'Re-enter your password', type: 'password', autoComplete: 'new-password', value: confirmPassword, set: setConfirmPassword },
     ].map(({ field, set, ...input }) => <AuthField key={field} {...input} type={input.type || 'text'}
       disabled={submitting} error={errors[field]} errorId={`error-${field}`}
       onChange={e => {
